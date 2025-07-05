@@ -2,6 +2,7 @@ package com.bibliotheque.gestion_pret.repository;
 
 import java.util.List;
 
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -18,4 +19,8 @@ public interface PretRepository extends JpaRepository<Pret, Long> {
 
     // Trouve tous les prêts ayant un certain statut
     List<Pret> findByStatutPret_Nom(String statutNom);
+
+    @Override
+    @EntityGraph(attributePaths = { "livre", "adherent", "statutPret", "typePret" })
+    List<Pret> findAll();
 }
