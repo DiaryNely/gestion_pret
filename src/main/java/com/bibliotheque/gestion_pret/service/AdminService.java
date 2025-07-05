@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.bibliotheque.gestion_pret.model.Adherent;
 import com.bibliotheque.gestion_pret.model.Livre;
+import com.bibliotheque.gestion_pret.model.Pret;
 import com.bibliotheque.gestion_pret.repository.AdherentRepository;
 import com.bibliotheque.gestion_pret.repository.LivreRepository;
 import com.bibliotheque.gestion_pret.repository.PretRepository;
@@ -36,18 +37,19 @@ public class AdminService {
     public Map<String, Object> getDashboardStatistics() {
         Map<String, Object> stats = new HashMap<>();
 
-        // Statistiques globales
         stats.put("totalLivres", livreRepository.count());
         stats.put("totalAdherents", adherentRepository.count());
 
-        // Statistiques sur les prêts
         stats.put("pretsEnCours", pretRepository.countByStatutPret_Nom("En cours"));
         stats.put("pretsEnRetard", pretRepository.countByStatutPret_Nom("En retard"));
 
-        // Listes pour les tableaux de bord
         stats.put("derniersPrets", pretRepository.findTop5ByOrderByDateEmpruntDesc());
         stats.put("listePretsEnRetard", pretRepository.findByStatutPret_Nom("En retard"));
 
         return stats;
+    }
+
+    public List<Pret> getAllPrets() {
+        return pretRepository.findAll();
     }
 }
