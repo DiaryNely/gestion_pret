@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Tableau de Bord</title>
+</head>
+<body>
+    <h1>Bienvenue, Adhérent !</h1>
+    <p>Ceci est votre tableau de bord personnel.</p>
+    <p>Votre ID est : <strong th:text="${userId}">0</strong>. Nous l'utiliserons pour vos futures actions.</p>
+    <form th:action="@{/logout}" method="post">
+        <input type="submit" value="Se déconnecter"/>
+    </form>
+</body>
+</html>

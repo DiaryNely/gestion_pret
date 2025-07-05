@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Tableau de Bord Admin</title>
+</head>
+<body>
+    <h1>Bienvenue, Administrateur !</h1>
+    <p>Ceci est la page réservée aux administrateurs.</p>
+    <form th:action="@{/logout}" method="post">
+        <input type="submit" value="Se déconnecter"/>
+    </form>
+</body>
+</html>
