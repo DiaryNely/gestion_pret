@@ -23,4 +23,7 @@ public interface PretRepository extends JpaRepository<Pret, Long> {
     @Override
     @EntityGraph(attributePaths = { "livre", "adherent", "statutPret", "typePret" })
     List<Pret> findAll();
+
+    // Dans PretRepository.java
+    long countByAdherent_IdAndStatutPret_Nom(Long adherentId, String statutNom);
 }
