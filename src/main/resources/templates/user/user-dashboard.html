@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -7,71 +8,99 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 </head>
+
 <body>
 
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <div class="container-fluid">
-        <a class="navbar-brand" href="#"><i class="bi bi-book-half"></i> G-Prêt Biblio</a>
-        <div class="collapse navbar-collapse">
-            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                <li class="nav-item"><a class="nav-link active" href="#">Catalogue</a></li>
-                <li class="nav-item"><a class="nav-link" href="#">Mes Prêts</a></li>
-            </ul>
-            <form th:action="@{/logout}" method="post">
-                <button type="submit" class="btn btn-outline-light">
-                    <i class="bi bi-box-arrow-right"></i> Se déconnecter
-                </button>
-            </form>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#"><i class="bi bi-book-half"></i> G-Prêt Biblio</a>
+            <div class="collapse navbar-collapse">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item"><a class="nav-link active" href="#">Catalogue</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">Mes Prêts</a></li>
+                </ul>
+                <form th:action="@{/logout}" method="post">
+                    <button type="submit" class="btn btn-outline-light">
+                        <i class="bi bi-box-arrow-right"></i> Se déconnecter
+                    </button>
+                </form>
+            </div>
         </div>
-    </div>
-</nav>
+    </nav>
 
-<div class="container mt-4">
-    <div class="p-5 mb-4 bg-light rounded-3">
-        <div class="container-fluid py-5">
-            <h1 class="display-5 fw-bold">Bienvenue, Adhérent !</h1>
-            <p class="col-md-8 fs-4">Parcourez notre catalogue et trouvez votre prochaine lecture.</p>
+    <div class="container mt-4">
+        <div class="p-5 mb-4 bg-light rounded-3">
+            <div class="container-fluid py-5">
+                <h1 class="display-5 fw-bold">Bienvenue, Adhérent !</h1>
+                <p class="col-md-8 fs-4">Parcourez notre catalogue et trouvez votre prochaine lecture.</p>
+            </div>
         </div>
-    </div>
 
-    <!-- Zone pour les messages de succès ou d'erreur -->
-    <div th:if="${successMessage}" class="alert alert-success" role="alert" th:text="${successMessage}"></div>
-    <div th:if="${errorMessage}" class="alert alert-danger" role="alert" th:text="${errorMessage}"></div>
+        <!-- Zone pour les messages de succès ou d'erreur -->
+        <div th:if="${successMessage}" class="alert alert-success" role="alert" th:text="${successMessage}"></div>
+        <div th:if="${errorMessage}" class="alert alert-danger" role="alert" th:text="${errorMessage}"></div>
 
+        <hr>
 
-    <h2>Notre Catalogue</h2>
-    <div class="row">
-        <!-- Boucle sur tous les livres -->
-        <div th:each="livre : ${livres}" class="col-md-4 mb-4">
-            <div class="card h-100">
-                <div class="card-body d-flex flex-column">
-                    <h5 class="card-title" th:text="${livre.titre}">Titre du Livre</h5>
-                    <h6 class="card-subtitle mb-2 text-muted" th:text="${livre.auteur}">Auteur</h6>
-                    <p class="card-text">
-                        <span class="badge bg-info" th:text="${livre.genre?.nom}">Genre</span>
-                        <span class="badge bg-secondary" th:text="${livre.langue?.nom}">Langue</span>
-                    </p>
-                    <p class="card-text" th:text="'Exemplaires disponibles : ' + ${livre.nombreExemplaires}"></p>
-
-                    <!-- Formulaire pour le bouton "Emprunter" -->
-                    <div class="mt-auto">
-                        <form th:action="@{/user/emprunter/{livreId}(livreId=${livre.id})}" method="post">
-                            <button type="submit" class="btn btn-primary w-100" th:disabled="${livre.nombreExemplaires <= 0}">
-                                <i class="bi bi-bag-plus-fill"></i> Emprunter
-                            </button>
-                        </form>
+        <div class="card mb-4">
+            <div class="card-body">
+                <h5 class="card-title"><i class="bi bi-search"></i> Rechercher un livre</h5>
+                <!-- Le formulaire enverra une requête GET à la même page -->
+                <form th:action="@{/user/dashboard/{id}(id=${userId})}" method="get" class="row g-3 align-items-end">
+                    <div class="col-md-8">
+                        <label for="query" class="form-label">Titre, Auteur ou Mots-clés</label>
+                        <!-- On conserve la valeur de la recherche précédente avec th:value -->
+                        <input type="text" class="form-control" id="query" name="query"
+                            placeholder="Ex: 'Orwell', 'dystopie', '1984'..." th:value="${searchQuery}">
                     </div>
+                    <div class="col-md-4">
+                        <button type="submit" class="btn btn-success w-100">Rechercher</button>
+                    </div>
+                </form>
+            </div>
+        </div>
 
+
+        <h2>Notre Catalogue</h2>
+        <div class="row">
+            <!-- Boucle sur tous les livres -->
+            <div th:each="livre : ${livres}" class="col-md-4 mb-4">
+                <div class="card h-100">
+                    <div class="card-body d-flex flex-column">
+                        <h5 class="card-title" th:text="${livre.titre}">Titre du Livre</h5>
+                        <h6 class="card-subtitle mb-2 text-muted" th:text="${livre.auteur}">Auteur</h6>
+                        <p class="card-text">
+                            <span class="badge bg-info" th:text="${livre.genre?.nom}">Genre</span>
+                            <span class="badge bg-secondary" th:text="${livre.langue?.nom}">Langue</span>
+                        </p>
+                        <p class="card-text" th:text="'Exemplaires disponibles : ' + ${livre.nombreExemplaires}"></p>
+
+                        <!-- Formulaire pour le bouton "Emprunter" -->
+                        <div class="mt-auto">
+                            <form th:action="@{/user/emprunter/{livreId}(livreId=${livre.id})}" method="post">
+                                <button type="submit" class="btn btn-primary w-100"
+                                    th:disabled="${livre.nombreExemplaires <= 0}">
+                                    <i class="bi bi-bag-plus-fill"></i> Emprunter
+                                </button>
+                            </form>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <div th:if="${#lists.isEmpty(livres)}" class="col-12">
+                <div class="alert alert-warning" role="alert">
+                    Aucun livre trouvé correspondant à votre recherche.
                 </div>
             </div>
         </div>
     </div>
-</div>
 
-<footer class="py-3 my-4">
-    <p class="text-center text-muted">© 2025 Gestion Prêt Bibliothèque</p>
-</footer>
+    <footer class="py-3 my-4">
+        <p class="text-center text-muted">© 2025 Gestion Prêt Bibliothèque</p>
+    </footer>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
+
 </html>

@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.bibliotheque.gestion_pret.model.Adherent;
@@ -32,12 +33,21 @@ public class UserController {
     @Autowired
     private AdherentRepository adherentRepository;
 
-    // Affiche le catalogue de livres
     @GetMapping("/dashboard/{id}")
-    public String userDashboard(@PathVariable Long id, Model model) {
-        List<Livre> livres = userService.getCatalogueLivres();
+    public String userDashboard(@PathVariable Long id,
+            @RequestParam(name = "query", required = false) String query,
+            Model model) {
+
+        List<Livre> livres = userService.searchLivres(query);
+
         model.addAttribute("livres", livres);
         model.addAttribute("userId", id);
+
+        // ===== MODIFICATION IMPORTANTE ICI =====
+        // On passe explicitement le terme de recherche au modèle
+        // pour pouvoir l'utiliser dans la vue.
+        model.addAttribute("searchQuery", query);
+
         return "user/user-dashboard";
     }
 
