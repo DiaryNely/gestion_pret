@@ -63,7 +63,7 @@ INSERT INTO livres (titre, auteur, date_edition, nombre_exemplaires, mots_cles, 
 
 -- Adhérents
 INSERT INTO adherents (nom, prenom, adresse_postale, email, telephone, type_adherent_id, abonnement_type, abonnement_debut, abonnement_fin, statut_paiement, mot_de_passe) VALUES
-('Dupont', 'Jean', '123 Rue de la Paix, 75001 Paris', 'jean.dupont@email.com', '0123456789', 1, 'annuel', '2024-01-15', '2025-01-15', 'paye', 'mdp_hashe_123'),
+('Dupont', 'Jean', '123 Rue de la Paix, 75001 Paris', 'jean.dupont@email.com', '0123456789', 1, 'annuel', '2024-01-15', '2026-01-15', 'paye', 'mdp_hashe_123'),
 ('Martin', 'Marie', '45 Avenue des Champs, 69002 Lyon', 'marie.martin@email.com', '0234567890', 2, 'mensuel', '2024-12-01', '2025-01-01', 'paye', 'mdp_hashe_456'),
 ('Dubois', 'Pierre', '78 Boulevard Saint-Germain, 75006 Paris', 'pierre.dubois@univ.fr', '0345678901', 3, 'annuel', '2024-09-01', '2025-09-01', 'paye', 'mdp_hashe_789'),
 ('Leroy', 'Sophie', '12 Rue Victor Hugo, 31000 Toulouse', 'sophie.leroy@email.com', '0456789012', 1, 'mensuel', '2024-11-15', '2024-12-15', 'impaye', 'mdp_hashe_101'),
@@ -113,9 +113,9 @@ INSERT INTO penalites (pret_id, adherent_id, montant, jours_retard, date_calcul,
 INSERT INTO parametres_systeme (nom, valeur, type_valeur, description, modifiable) VALUES
 ('penalite_par_jour', '0.50', 'decimal', 'Montant de la pénalité par jour de retard', true),
 ('jours_tolerance', '2', 'integer', 'Nombre de jours de grâce avant pénalité', true),
-('duree_reservation', '7', 'integer', 'Durée en jours de validité d\'une réservation', true),
+('duree_reservation', '7', 'integer', 'Durée en jours de validité d une réservation', true),
 ('max_prolongations', '2', 'integer', 'Nombre maximum de prolongations par prêt', true),
-('duree_prolongation', '7', 'integer', 'Durée en jours d\'une prolongation', true),
+('duree_prolongation', '7', 'integer', 'Durée en jours d une prolongation', true),
 ('notification_avant_echeance', '3', 'integer', 'Nombre de jours avant échéance pour notifier', true),
 ('bibliotheque_nom', 'Bibliothèque Municipale', 'string', 'Nom de la bibliothèque', true),
 ('bibliotheque_adresse', '1 Place de la Culture, 75001 Paris', 'string', 'Adresse de la bibliothèque', true),
