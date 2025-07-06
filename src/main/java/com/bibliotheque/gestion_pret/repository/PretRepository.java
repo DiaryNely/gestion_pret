@@ -26,4 +26,7 @@ public interface PretRepository extends JpaRepository<Pret, Long> {
 
     // Dans PretRepository.java
     long countByAdherent_IdAndStatutPret_Nom(Long adherentId, String statutNom);
+
+    @EntityGraph(attributePaths = { "livre", "statutPret" })
+    List<Pret> findByAdherent_IdOrderByDateEmpruntDesc(Long adherentId);
 }

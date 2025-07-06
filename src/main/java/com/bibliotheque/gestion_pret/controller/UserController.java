@@ -16,6 +16,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.bibliotheque.gestion_pret.model.Adherent;
 import com.bibliotheque.gestion_pret.model.Livre;
+import com.bibliotheque.gestion_pret.model.Pret;
 import com.bibliotheque.gestion_pret.repository.AdherentRepository;
 import com.bibliotheque.gestion_pret.service.PretService;
 import com.bibliotheque.gestion_pret.service.UserService;
@@ -43,9 +44,6 @@ public class UserController {
         model.addAttribute("livres", livres);
         model.addAttribute("userId", id);
 
-        // ===== MODIFICATION IMPORTANTE ICI =====
-        // On passe explicitement le terme de recherche au modèle
-        // pour pouvoir l'utiliser dans la vue.
         model.addAttribute("searchQuery", query);
 
         return "user/user-dashboard";
@@ -69,5 +67,21 @@ public class UserController {
 
         // Redirection dynamique vers le bon dashboard
         return "redirect:/user/dashboard/" + adherent.getId();
+    }
+
+    @GetMapping("/mes-prets")
+    public String mesPrets(Model model) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String userEmail = authentication.getName();
+        Adherent adherent = adherentRepository.findByEmail(userEmail)
+                .orElseThrow(() -> new IllegalStateException("Utilisateur non trouvé dans la session"));
+
+        List<Pret> prets = userService.getPretsByAdherentId(adherent.getId());
+
+        // On ajoute la liste des prêts et l'ID de l'utilisateur au modèle
+        model.addAttribute("prets", prets);
+        model.addAttribute("userId", adherent.getId());
+
+        return "user/mes-prets"; // Nom de la nouvelle page HTML
     }
 }
