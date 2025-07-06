@@ -33,7 +33,7 @@ public class PretService {
         private TypePretRepository typePretRepository; // A créer
 
         @Transactional // Transactionnel car on modifie plusieurs tables (prets, livres)
-        public void emprunterLivre(Long adherentId, Long livreId) throws Exception {
+        public void emprunterLivre(Long adherentId, Long livreId, Long typePretId) throws Exception {
                 // 1. Récupérer les objets de la base de données
                 Livre livre = livreRepository.findById(livreId)
                                 .orElseThrow(() -> new Exception("Livre non trouvé avec l'ID : " + livreId));
@@ -83,11 +83,10 @@ public class PretService {
                 // avec ces noms)
                 StatutPret statutEnCours = statutPretRepository.findByNom("En cours")
                                 .orElseThrow(() -> new Exception("Statut de prêt 'En cours' non trouvé."));
-                TypePret typeDomicile = typePretRepository.findByNom("Prêt à domicile")
-                                .orElseThrow(() -> new Exception("Type de prêt 'Prêt à domicile' non trouvé."));
-
+                TypePret typeChoisi = typePretRepository.findById(typePretId)
+                                .orElseThrow(() -> new Exception("Type de prêt invalide sélectionné."));
                 nouveauPret.setStatutPret(statutEnCours);
-                nouveauPret.setTypePret(typeDomicile);
+                nouveauPret.setTypePret(typeChoisi);
 
                 // Sauvegarder le nouveau prêt
                 pretRepository.save(nouveauPret);
@@ -115,9 +114,9 @@ public class PretService {
 
                 // 4. Mettre à jour les informations du prêt
                 pret.setDateRetourReelle(dateRetourReelle);
-
                 // Mettre à jour le statut du prêt
-                StatutPret statutRetourne = statutPretRepository.findByNom("Retourné")
+                final long ID_STATUT_RETOURNE = 2;
+                StatutPret statutRetourne = statutPretRepository.findById(ID_STATUT_RETOURNE)
                                 .orElseThrow(() -> new Exception(
                                                 "Statut 'Retourné' non trouvé dans la configuration."));
                 pret.setStatutPret(statutRetourne);

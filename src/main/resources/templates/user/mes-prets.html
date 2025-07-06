@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -292,24 +293,24 @@
                 padding: 1.5rem;
                 margin-bottom: 1.5rem;
             }
-            
+
             .page-header h1 {
                 font-size: 1.5rem;
             }
-            
+
             .table-responsive {
                 font-size: 0.875rem;
             }
-            
+
             .btn-sm {
                 padding: 0.25rem 0.5rem;
                 font-size: 0.75rem;
             }
-            
+
             .action-buttons {
                 flex-direction: column;
             }
-            
+
             .action-buttons .btn {
                 margin-right: 0;
                 margin-bottom: 0.25rem;
@@ -317,177 +318,185 @@
         }
     </style>
 </head>
+
 <body>
 
-<!-- Barre de navigation -->
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <div class="container-fluid">
-        <a class="navbar-brand" href="#"><i class="bi bi-book-half"></i> Boky</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                <!-- Lien vers le catalogue (n'est plus la page active) -->
-                <li class="nav-item">
-                    <a class="nav-link" th:href="@{/user/dashboard/{id}(id=${userId})}">Catalogue</a>
-                </li>
-                <!-- Lien "Mes Prêts" est maintenant actif -->
-                <li class="nav-item">
-                    <a class="nav-link active" href="#">Mes Prêts</a>
-                </li>
-            </ul>
-            <form th:action="@{/logout}" method="post">
-                <button type="submit" class="btn btn-outline-light">
-                    <i class="bi bi-box-arrow-right"></i> Se déconnecter
-                </button>
-            </form>
+    <!-- Barre de navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#"><i class="bi bi-book-half"></i> Boky</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <!-- Lien vers le catalogue (n'est plus la page active) -->
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/user/dashboard/{id}(id=${userId})}">Catalogue</a>
+                    </li>
+                    <!-- Lien "Mes Prêts" est maintenant actif -->
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#">Mes Prêts</a>
+                    </li>
+                </ul>
+                <form th:action="@{/logout}" method="post">
+                    <button type="submit" class="btn btn-outline-light">
+                        <i class="bi bi-box-arrow-right"></i> Se déconnecter
+                    </button>
+                </form>
+            </div>
         </div>
-    </div>
-</nav>
+    </nav>
 
-<!-- Contenu principal de la page -->
-<div class="container mt-4">
-    <h1 class="mb-4"><i class="bi bi-list-task"></i> Mon Historique de Prêts</h1>
+    <!-- Contenu principal de la page -->
+    <div class="container mt-4">
+        <h1 class="mb-4"><i class="bi bi-list-task"></i> Mon Historique de Prêts</h1>
 
-    <!-- Zone pour les messages de succès ou d'erreur flashés depuis le contrôleur -->
-    <div th:if="${successMessage}" class="alert alert-success" role="alert" th:text="${successMessage}"></div>
-    <div th:if="${errorMessage}" class="alert alert-danger" role="alert" th:text="${errorMessage}"></div>
+        <!-- Zone pour les messages de succès ou d'erreur flashés depuis le contrôleur -->
+        <div th:if="${successMessage}" class="alert alert-success" role="alert" th:text="${successMessage}"></div>
+        <div th:if="${errorMessage}" class="alert alert-danger" role="alert" th:text="${errorMessage}"></div>
 
-    <div class="card">
-        <div class="card-body">
-            <div class="table-responsive">
-                <table class="table table-hover align-middle">
-                    <thead>
-                        <tr>
-                            <th>Livre</th>
-                            <th>Date d'emprunt</th>
-                            <th>Date de retour prévue</th>
-                            <th>Date de retour réelle</th>
-                            <th>Statut</th>
-                            <th class="text-center">Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <!-- Boucle sur chaque prêt de l'utilisateur -->
-                        <tr th:each="pret : ${prets}" th:classappend="${pret.statutPret?.nom == 'En retard'} ? 'table-danger' : ''">
-                            <td th:text="${pret.livre?.titre}">Titre du Livre</td>
-                            <td th:text="${#dates.format(pret.dateEmprunt, 'dd/MM/yyyy')}">01/01/2024</td>
-                            <td th:text="${#dates.format(pret.dateRetourPrevue, 'dd/MM/yyyy')}">15/01/2024</td>
-                            <td th:text="${pret.dateRetourReelle != null} ? ${#dates.format(pret.dateRetourReelle, 'dd/MM/yyyy')} : '-'">-</td>
-                            <td>
-                                <!-- Affiche un badge de couleur selon le statut du prêt -->
-                                <span th:switch="${pret.statutPret?.nom}">
-                                    <span th:case="'En cours'" class="badge bg-primary">En cours</span>
-                                    <span th:case="'Retourné'" class="badge bg-success">Retourné</span>
-                                    <span th:case="'En retard'" class="badge bg-danger">En retard</span>
-                                </span>
-                            </td>
-                            <td class="text-center">
-                                <!-- Affiche le bouton "Prolonger" si le prêt est en cours -->
-                                <button th:if="${pret.statutPret?.nom == 'En cours'}" class="btn btn-sm btn-info" title="Prolonger le prêt">
-                                    <i class="bi bi-calendar-plus"></i>
-                                </button>
-                                
-                                <!-- Affiche le bouton "Rendre" si le prêt n'est pas déjà retourné -->
-                                <button th:if="${pret.statutPret?.nom == 'En cours' or pret.statutPret?.nom == 'En retard'}"
-                                        type="button"
-                                        class="btn btn-sm btn-success btn-rendre"
-                                        title="Rendre ce livre"
-                                        data-bs-toggle="modal"
-                                        data-bs-target="#rendreLivreModal"
+        <div class="card">
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle">
+                        <thead>
+                            <tr>
+                                <th>Livre</th>
+                                <th>Date d'emprunt</th>
+                                <th>Date de retour prévue</th>
+                                <th>Date de retour réelle</th>
+                                <th>Statut</th>
+                                <th class="text-center">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Boucle sur chaque prêt de l'utilisateur -->
+                            <tr th:each="pret : ${prets}"
+                                th:classappend="${pret.statutPret?.nom == 'En retard'} ? 'table-danger' : ''">
+                                <td th:text="${pret.livre?.titre}">Titre du Livre</td>
+
+                                <td th:text="${#temporals.format(pret.dateEmprunt, 'dd/MM/yyyy')}"></td>
+                                <td th:text="${#temporals.format(pret.dateRetourPrevue, 'dd/MM/yyyy')}"></td>
+                                <td
+                                    th:text="${pret.dateRetourReelle != null} ? ${#temporals.format(pret.dateRetourReelle, 'dd/MM/yyyy')} : '-'">
+                                </td>
+                                <td>
+                                    <!-- Affiche un badge de couleur selon le statut du prêt -->
+                                    <span th:switch="${pret.statutPret?.nom}">
+                                        <span th:case="'En cours'" class="badge bg-primary">En cours</span>
+                                        <span th:case="'Retourné'" class="badge bg-success">Retourné</span>
+                                        <span th:case="'En retard'" class="badge bg-danger">En retard</span>
+                                    </span>
+                                </td>
+                                <td class="text-center">
+                                    <!-- Affiche le bouton "Prolonger" si le prêt est en cours -->
+                                    <button th:if="${pret.statutPret?.nom == 'En cours'}" class="btn btn-sm btn-info"
+                                        title="Prolonger le prêt">
+                                        <i class="bi bi-calendar-plus"></i>
+                                    </button>
+
+                                    <!-- Affiche le bouton "Rendre" si le prêt n'est pas déjà retourné -->
+                                    <button
+                                        th:if="${pret.statutPret?.nom == 'En cours' or pret.statutPret?.nom == 'En retard'}"
+                                        type="button" class="btn btn-sm btn-success btn-rendre" title="Rendre ce livre"
+                                        data-bs-toggle="modal" data-bs-target="#rendreLivreModal"
                                         th:attr="data-pret-id=${pret.id}, data-livre-titre=${pret.livre?.titre}">
-                                    <i class="bi bi-check2-circle"></i>
-                                </button>
-                            </td>
-                        </tr>
-                        <!-- Affiche un message si l'utilisateur n'a aucun prêt -->
-                        <tr th:if="${#lists.isEmpty(prets)}">
-                            <td colspan="6" class="text-center p-4">Vous n'avez aucun prêt pour le moment.</td>
-                        </tr>
-                    </tbody>
-                </table>
+                                        <i class="bi bi-check2-circle"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                            <!-- Affiche un message si l'utilisateur n'a aucun prêt -->
+                            <tr th:if="${#lists.isEmpty(prets)}">
+                                <td colspan="6" class="text-center p-4">Vous n'avez aucun prêt pour le moment.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>
-</div>
 
-<!-- ================================== -->
-<!-- MODAL POUR RENDRE UN LIVRE         -->
-<!-- Ce code est initialement caché     -->
-<!-- ================================== -->
-<div class="modal fade" id="rendreLivreModal" tabindex="-1" aria-labelledby="rendreLivreModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <!-- Le formulaire envoie les données à notre nouvelle route POST /user/rendre -->
-            <form th:action="@{/user/rendre}" method="post">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="rendreLivreModalLabel">Rendre un livre</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <p>Vous êtes sur le point de rendre le livre : <strong id="livreTitreModal">Titre du livre ici</strong>.</p>
-                    
-                    <!-- Champ caché pour envoyer l'ID du prêt au contrôleur -->
-                    <input type="hidden" name="pretId" id="pretIdModal" value="">
-                    
-                    <div class="mb-3">
-                        <label for="dateRetour" class="form-label fw-bold">Veuillez sélectionner la date de retour réelle :</label>
-                        <input type="date" class="form-control" id="dateRetour" name="dateRetour" required>
+    <!-- ================================== -->
+    <!-- MODAL POUR RENDRE UN LIVRE         -->
+    <!-- Ce code est initialement caché     -->
+    <!-- ================================== -->
+    <div class="modal fade" id="rendreLivreModal" tabindex="-1" aria-labelledby="rendreLivreModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <!-- Le formulaire envoie les données à notre nouvelle route POST /user/rendre -->
+                <form th:action="@{/user/rendre}" method="post">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="rendreLivreModalLabel">Rendre un livre</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
-                    <button type="submit" class="btn btn-primary">Confirmer le retour</button>
-                </div>
-            </form>
+                    <div class="modal-body">
+                        <p>Vous êtes sur le point de rendre le livre : <strong id="livreTitreModal">Titre du livre
+                                ici</strong>.</p>
+
+                        <!-- Champ caché pour envoyer l'ID du prêt au contrôleur -->
+                        <input type="hidden" name="pretId" id="pretIdModal" value="">
+
+                        <div class="mb-3">
+                            <label for="dateRetour" class="form-label fw-bold">Veuillez sélectionner la date de retour
+                                réelle :</label>
+                            <input type="date" class="form-control" id="dateRetour" name="dateRetour" required>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+                        <button type="submit" class="btn btn-primary">Confirmer le retour</button>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
-</div>
 
 
-<!-- Pied de page -->
-<footer class="py-3 my-4">
-    <p class="text-center text-muted">© 2025 Gestion Prêt Bibliothèque</p>
-</footer>
+    <!-- Pied de page -->
+    <footer class="py-3 my-4">
+        <p class="text-center text-muted">© 2025 Gestion Prêt Bibliothèque</p>
+    </footer>
 
-<!-- ================================== -->
-<!-- SCRIPTS JAVASCRIPT                 -->
-<!-- ================================== -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-<script>
-    // Attend que tout le contenu de la page soit chargé
-    document.addEventListener('DOMContentLoaded', function () {
-        
-        // Sélectionne le modal par son ID
-        const rendreModal = document.getElementById('rendreLivreModal');
-        
-        if (rendreModal) {
-            // Ajoute un écouteur d'événement qui se déclenche juste avant que le modal ne s'affiche
-            rendreModal.addEventListener('show.bs.modal', function (event) {
-                
-                // 'event.relatedTarget' est le bouton spécifique qui a déclenché le modal
-                const button = event.relatedTarget;
-                
-                // On récupère les données des attributs 'data-*' du bouton cliqué
-                const pretId = button.getAttribute('data-pret-id');
-                const livreTitre = button.getAttribute('data-livre-titre');
-                
-                // On sélectionne les éléments à l'intérieur du modal
-                const modalTitreLivre = rendreModal.querySelector('#livreTitreModal');
-                const modalInputPretId = rendreModal.querySelector('#pretIdModal');
-                
-                // On met à jour le contenu du modal avec les données du prêt
-                modalTitreLivre.textContent = livreTitre;
-                modalInputPretId.value = pretId;
-                
-                // On met la date d'aujourd'hui par défaut dans le champ date
-                const dateInput = rendreModal.querySelector('#dateRetour');
-                dateInput.valueAsDate = new Date();
-            });
-        }
-    });
-</script>
+    <!-- ================================== -->
+    <!-- SCRIPTS JAVASCRIPT                 -->
+    <!-- ================================== -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Attend que tout le contenu de la page soit chargé
+        document.addEventListener('DOMContentLoaded', function () {
+
+            // Sélectionne le modal par son ID
+            const rendreModal = document.getElementById('rendreLivreModal');
+
+            if (rendreModal) {
+                // Ajoute un écouteur d'événement qui se déclenche juste avant que le modal ne s'affiche
+                rendreModal.addEventListener('show.bs.modal', function (event) {
+
+                    // 'event.relatedTarget' est le bouton spécifique qui a déclenché le modal
+                    const button = event.relatedTarget;
+
+                    // On récupère les données des attributs 'data-*' du bouton cliqué
+                    const pretId = button.getAttribute('data-pret-id');
+                    const livreTitre = button.getAttribute('data-livre-titre');
+
+                    // On sélectionne les éléments à l'intérieur du modal
+                    const modalTitreLivre = rendreModal.querySelector('#livreTitreModal');
+                    const modalInputPretId = rendreModal.querySelector('#pretIdModal');
+
+                    // On met à jour le contenu du modal avec les données du prêt
+                    modalTitreLivre.textContent = livreTitre;
+                    modalInputPretId.value = pretId;
+
+                    // On met la date d'aujourd'hui par défaut dans le champ date
+                    const dateInput = rendreModal.querySelector('#dateRetour');
+                    dateInput.valueAsDate = new Date();
+                });
+            }
+        });
+    </script>
 
 </body>
+
 </html>

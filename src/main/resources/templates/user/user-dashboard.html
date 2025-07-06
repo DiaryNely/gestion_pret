@@ -306,19 +306,19 @@
             .hero-section {
                 margin-bottom: 1.5rem;
             }
-            
+
             .hero-section .display-5 {
                 font-size: 1.75rem;
             }
-            
+
             .section-title {
                 font-size: 1.5rem;
             }
-            
+
             .book-card .card-body {
                 padding: 1.25rem;
             }
-            
+
             .search-card .card-body {
                 padding: 1.25rem;
             }
@@ -407,19 +407,18 @@
                             </span>
                         </p>
 
-                        <!-- Formulaire pour le bouton "Emprunter" -->
-                        <div class="mt-auto">
-                            <form th:action="@{/user/emprunter/{livreId}(livreId=${livre.id})}" method="post">
-                                <button type="submit" class="btn btn-primary w-100"
-                                    th:disabled="${livre.nombreExemplaires <= 0}">
-                                    <i class="bi bi-plus-circle"></i> Emprunter
-                                </button>
-                            </form>
+                        <!-- Nouveau bloc pour le bouton "Emprunter" -->
+                        <div th:if="${livre.nombreExemplaires > 0}">
+                            <button type="button" class="btn btn-primary w-100" data-bs-toggle="modal"
+                                data-bs-target="#emprunterLivreModal"
+                                th:attr="data-livre-id=${livre.id}, data-livre-titre=${livre.titre}">
+                                <i class="bi bi-bag-plus-fill"></i> Emprunter
+                            </button>
                         </div>
                     </div>
                 </div>
             </div>
-            
+
             <div th:if="${#lists.isEmpty(livres)}" class="col-12">
                 <div class="alert alert-warning d-flex align-items-center justify-content-center" role="alert">
                     <div class="text-center">
@@ -431,6 +430,45 @@
         </div>
     </div>
 
+
+    <!-- ================================== -->
+    <!-- MODAL POUR EMPRUNTER UN LIVRE      -->
+    <!-- ================================== -->
+    <div class="modal fade" id="emprunterLivreModal" tabindex="-1" aria-labelledby="emprunterLivreModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form th:action="@{/user/emprunter}" method="post">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="emprunterLivreModalLabel">Emprunter un livre</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p>Vous êtes sur le point d'emprunter : <strong id="livreTitreEmprunterModal">Titre du
+                                livre</strong>.</p>
+
+                        <!-- Champ caché pour l'ID du livre -->
+                        <input type="hidden" name="livreId" id="livreIdEmprunterModal" value="">
+
+                        <!-- Liste déroulante pour le type de prêt -->
+                        <div class="mb-3">
+                            <label for="typePretId" class="form-label fw-bold">Choisissez le type de prêt :</label>
+                            <select class="form-select" id="typePretId" name="typePretId" required>
+                                <option value="">Sélectionner...</option>
+                                <option th:each="type : ${typesDePret}" th:value="${type.id}" th:text="${type.nom}">
+                                </option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+                        <button type="submit" class="btn btn-primary">Confirmer l'emprunt</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
     <footer>
         <div class="container">
             <p class="text-center">© 2025 Gestion Prêt Bibliothèque</p>
@@ -438,6 +476,28 @@
     </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        // Dans la balise <script> de user-dashboard.html
+
+        document.addEventListener('DOMContentLoaded', function () {
+            // ... (s'il y a déjà du code JS, laissez-le) ...
+
+            // --- Code pour le modal "Emprunter" ---
+            const emprunterModal = document.getElementById('emprunterLivreModal');
+            if (emprunterModal) {
+                emprunterModal.addEventListener('show.bs.modal', function (event) {
+                    const button = event.relatedTarget;
+                    const livreId = button.getAttribute('data-livre-id');
+                    const livreTitre = button.getAttribute('data-livre-titre');
+
+                    emprunterModal.querySelector('#livreTitreEmprunterModal').textContent = livreTitre;
+                    emprunterModal.querySelector('#livreIdEmprunterModal').value = livreId;
+                });
+            }
+        });
+    </script>
+
 </body>
 
 </html>

@@ -19,7 +19,9 @@ import com.bibliotheque.gestion_pret.model.Adherent;
 import com.bibliotheque.gestion_pret.model.Livre;
 import com.bibliotheque.gestion_pret.model.Pret;
 import com.bibliotheque.gestion_pret.repository.AdherentRepository;
+import com.bibliotheque.gestion_pret.repository.TypePretRepository;
 import com.bibliotheque.gestion_pret.service.PretService;
+import com.bibliotheque.gestion_pret.service.ProlongationService;
 import com.bibliotheque.gestion_pret.service.UserService;
 
 @Controller
@@ -35,6 +37,9 @@ public class UserController {
     @Autowired
     private AdherentRepository adherentRepository;
 
+    @Autowired
+    private TypePretRepository typePretRepository;
+
     @GetMapping("/dashboard/{id}")
     public String userDashboard(@PathVariable Long id,
             @RequestParam(name = "query", required = false) String query,
@@ -44,14 +49,16 @@ public class UserController {
 
         model.addAttribute("livres", livres);
         model.addAttribute("userId", id);
+        model.addAttribute("typesDePret", typePretRepository.findAll());
 
         model.addAttribute("searchQuery", query);
 
         return "user/user-dashboard";
     }
 
-    @PostMapping("/emprunter/{livreId}")
-    public String emprunterLivre(@PathVariable Long livreId, RedirectAttributes redirectAttributes) {
+    @PostMapping("/emprunter")
+    public String emprunterLivre(@RequestParam("livreId") Long livreId, @RequestParam("typePretId") Long typePretId,
+            RedirectAttributes redirectAttributes) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String userEmail = authentication.getName();
 
@@ -60,7 +67,7 @@ public class UserController {
                 .orElseThrow(() -> new IllegalStateException("Utilisateur non trouvé dans la session"));
 
         try {
-            pretService.emprunterLivre(adherent.getId(), livreId);
+            pretService.emprunterLivre(adherent.getId(), livreId, typePretId);
             redirectAttributes.addFlashAttribute("successMessage", "Livre emprunté avec succès !");
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
@@ -96,6 +103,30 @@ public class UserController {
             redirectAttributes.addFlashAttribute("successMessage", "Livre retourné avec succès !");
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("errorMessage", "Erreur lors du retour du livre : " + e.getMessage());
+        }
+
+        return "redirect:/user/mes-prets";
+    }
+
+    @Autowired
+    private ProlongationService prolongationService;
+
+    @PostMapping("/prolonger")
+    public String demanderProlongation(@RequestParam("pretId") Long pretId,
+            @RequestParam("motif") String motif,
+            RedirectAttributes redirectAttributes) {
+
+        try {
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            String userEmail = authentication.getName();
+            Adherent demandeur = adherentRepository.findByEmail(userEmail)
+                    .orElseThrow(() -> new IllegalStateException("Utilisateur non trouvé"));
+
+            prolongationService.demanderProlongation(pretId, demandeur, motif);
+            redirectAttributes.addFlashAttribute("successMessage",
+                    "Votre demande de prolongation a bien été envoyée. Elle est en attente de validation.");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Erreur : " + e.getMessage());
         }
 
         return "redirect:/user/mes-prets";
