@@ -1,5 +1,6 @@
 package com.bibliotheque.gestion_pret.controller;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -83,5 +84,20 @@ public class UserController {
         model.addAttribute("userId", adherent.getId());
 
         return "user/mes-prets"; // Nom de la nouvelle page HTML
+    }
+
+    @PostMapping("/rendre")
+    public String rendreLivre(@RequestParam("pretId") Long pretId,
+            @RequestParam("dateRetour") LocalDate dateRetour,
+            RedirectAttributes redirectAttributes) {
+
+        try {
+            pretService.rendreLivre(pretId, dateRetour);
+            redirectAttributes.addFlashAttribute("successMessage", "Livre retourné avec succès !");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Erreur lors du retour du livre : " + e.getMessage());
+        }
+
+        return "redirect:/user/mes-prets";
     }
 }
