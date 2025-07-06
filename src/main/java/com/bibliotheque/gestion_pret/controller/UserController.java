@@ -58,6 +58,6 @@ public class UserController {
         }
 
         // Redirection dynamique vers le bon dashboard
-        return "redirect:/user/user-dashboard/" + adherent.getId();
+        return "redirect:/user/dashboard/" + adherent.getId();
     }
 }
