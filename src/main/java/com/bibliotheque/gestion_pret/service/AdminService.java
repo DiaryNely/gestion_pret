@@ -18,13 +18,10 @@ import com.bibliotheque.gestion_pret.repository.AdherentRepository;
 import com.bibliotheque.gestion_pret.repository.LivreRepository;
 import com.bibliotheque.gestion_pret.repository.PretRepository;
 import com.bibliotheque.gestion_pret.repository.ProlongationRepository;
-import com.bibliotheque.gestion_pret.repository.StatutPretRepository;
 
 @Service
-@Transactional(readOnly = true) // Appliqué à toute la classe pour la lecture
+@Transactional(readOnly = true)
 public class AdminService {
-
-    private final StatutPretRepository statutPretRepository;
 
     @Autowired
     private LivreRepository livreRepository;
@@ -34,10 +31,6 @@ public class AdminService {
     private PretRepository pretRepository;
     @Autowired
     private ProlongationRepository prolongationRepository;
-
-    AdminService(StatutPretRepository statutPretRepository) {
-        this.statutPretRepository = statutPretRepository;
-    }
 
     public List<Livre> getAllLivres() {
         return livreRepository.findAll();
@@ -82,19 +75,20 @@ public class AdminService {
         demande.setApprouvePar(admin);
         demande.setDateApprobation(LocalDate.now());
 
-        if ("approuver".equals(action)) {
-            demande.setStatut(StatutProlongation.approuvee);
-
-            // Mettre à jour la date de retour du prêt original
-            Pret pret = demande.getPret();
-            pret.setDateRetourPrevue(demande.getNouvelleDateRetour());
-            pretRepository.save(pret);
-
-        } else if ("refuser".equals(action)) {
-            demande.setStatut(StatutProlongation.refusee);
-        } else {
+        if (null == action) {
             throw new Exception("Action non valide.");
-        }
+        } else
+            switch (action) {
+                case "approuver" -> {
+                    demande.setStatut(StatutProlongation.approuvee);
+                    // Mettre à jour la date de retour du prêt original
+                    Pret pret = demande.getPret();
+                    pret.setDateRetourPrevue(demande.getNouvelleDateRetour());
+                    pretRepository.save(pret);
+                }
+                case "refuser" -> demande.setStatut(StatutProlongation.refusee);
+                default -> throw new Exception("Action non valide.");
+            }
 
         prolongationRepository.save(demande);
     }
