@@ -40,6 +40,9 @@ public class PretService {
         @Autowired
         private ReservationRepository reservationRepository;
 
+        @Autowired
+        private PenaliteService penaliteService;
+
         @Transactional
         public void emprunterLivre(Long adherentId, Long livreId, Long typePretId) throws Exception {
                 Livre livre = livreRepository.findById(livreId)
@@ -50,6 +53,11 @@ public class PretService {
                 if (adherent.getAbonnementFin() == null || adherent.getAbonnementFin().isBefore(LocalDate.now())
                                 || adherent.getStatutPaiement() != StatutPaiementAdherent.paye) {
                         throw new Exception("Votre abonnement n'est pas actif ou votre paiement n'est pas à jour.");
+                }
+
+                if (penaliteService.aDesPenalitesImpayees(adherentId)) {
+                        throw new Exception(
+                                        "Emprunt impossible : vous avez des pénalités impayées. Veuillez les régler auprès d'un administrateur.");
                 }
 
                 if (livre.getNombreExemplaires() <= 0) {
@@ -116,6 +124,8 @@ public class PretService {
                 Livre livreRetourne = pret.getLivre();
 
                 reservationService.traiterRetourLivre(livreRetourne);
+
+                penaliteService.creerPenaliteSiNecessaire(pret);
         }
 
         @Transactional

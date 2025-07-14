@@ -13,10 +13,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.bibliotheque.gestion_pret.enums.StatutPaiementPenalite;
 import com.bibliotheque.gestion_pret.model.Adherent;
+import com.bibliotheque.gestion_pret.model.Penalite;
 import com.bibliotheque.gestion_pret.model.Pret;
 import com.bibliotheque.gestion_pret.repository.AdherentRepository;
 import com.bibliotheque.gestion_pret.service.AdminService;
+import com.bibliotheque.gestion_pret.service.PenaliteService;
 
 @Controller
 @RequestMapping("/admin")
@@ -28,9 +31,11 @@ public class AdminController {
     @Autowired
     private AdherentRepository adherentRepository;
 
+    @Autowired
+    private PenaliteService penaliteService;
+
     @GetMapping("/dashboard")
     public String adminDashboard(Model model) {
-        // On récupère toutes les listes et statistiques d'un coup
         model.addAttribute("stats", adminService.getDashboardStatistics());
         model.addAttribute("livres", adminService.getAllLivres());
         model.addAttribute("adherents", adminService.getAllAdherents());
@@ -48,14 +53,13 @@ public class AdminController {
     @GetMapping("/demandes")
     public String voirDemandes(Model model) {
         model.addAttribute("demandes", adminService.getDemandesEnAttente());
-        return "admin/admin-demandes"; // Le nom du nouveau fichier HTML
+        return "admin/admin-demandes";
     }
 
     @PostMapping("/demandes/traiter")
     public String traiterDemande(@RequestParam Long prolongationId, @RequestParam String action,
             RedirectAttributes redirectAttributes) {
         try {
-            // Récupérer l'ID de l'admin connecté
             Authentication auth = SecurityContextHolder.getContext().getAuthentication();
             String adminEmail = auth.getName();
             Adherent admin = adherentRepository.findByEmail(adminEmail).get();
@@ -66,5 +70,30 @@ public class AdminController {
             redirectAttributes.addFlashAttribute("errorMessage", "Erreur : " + e.getMessage());
         }
         return "redirect:/admin/demandes";
+    }
+
+    @GetMapping("/penalites")
+    public String gestionPenalites(Model model) {
+        List<Penalite> penalitesImpayees = penaliteService.listerPenalitesParStatut(StatutPaiementPenalite.impaye);
+
+        model.addAttribute("penalites", penalitesImpayees);
+        model.addAttribute("statuts", StatutPaiementPenalite.values());
+        return "admin/gestion-penalites";
+    }
+
+    @PostMapping("/penalites/maj-statut")
+    public String mettreAJourStatutPenalite(@RequestParam("penaliteId") Long penaliteId,
+            @RequestParam("statut") StatutPaiementPenalite nouveauStatut,
+            @RequestParam(value = "notes", required = false) String notes,
+            RedirectAttributes redirectAttributes) {
+        try {
+            penaliteService.changerStatutPenalite(penaliteId, nouveauStatut, notes);
+            redirectAttributes.addFlashAttribute("successMessage",
+                    "Le statut de la pénalité a été mis à jour avec succès.");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Erreur : " + e.getMessage());
+        }
+
+        return "redirect:/admin/penalites";
     }
 }

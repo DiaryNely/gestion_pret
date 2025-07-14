@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Mes Pénalités - G-Prêt Biblio</title>
+    <!-- Copiez ici le <head> d'une de vos autres pages pour avoir le même CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Ici, le même CSS que votre page dashboard pour la cohérence */
+        :root {
+            --primary-blue: #1e40af;
+            --primary-blue-hover: #1e3a8a;
+            --danger-red: #dc2626;
+            --light-gray: #f8fafc;
+            --text-dark: #1f2937;
+            --text-muted: #6b7280;
+            --card-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+        body { background-color: var(--light-gray); font-family: 'Inter', sans-serif; }
+        .navbar { background-color: white !important; box-shadow: 0 1px 3px rgba(0,0,0,0.1); padding: 1rem 0; }
+        .navbar-brand { font-weight: 700; font-size: 1.5rem; color: var(--primary-blue) !important; }
+        .nav-link.active { color: var(--primary-blue) !important; background-color: rgba(30, 64, 175, 0.1); border-radius: 0.375rem; }
+        .hero-section { background: white; border-radius: 12px; box-shadow: var(--card-shadow); margin-bottom: 2rem; border: 1px solid #e2e8f0; }
+        .hero-section h1 { color: var(--text-dark); font-weight: 700; }
+        .main-card { background: white; border-radius: 12px; box-shadow: var(--card-shadow); border: 1px solid #e2e8f0; }
+        .table thead th { background-color: #f8fafc; border-bottom: 2px solid #e2e8f0; color: var(--text-dark); font-weight: 600; text-transform: uppercase; }
+        .badge { border-radius: 20px; padding: 0.5em 0.875em; font-weight: 500; font-size: 0.75rem; }
+        .table-danger { background-color: #fef2f2 !important; }
+        footer { background-color: white; border-top: 1px solid #e2e8f0; margin-top: 3rem; padding: 2rem 0; }
+    </style>
+</head>
+
+<body>
+
+    <!-- Barre de navigation -->
+    <nav class="navbar navbar-expand-lg">
+        <div class="container">
+            <a class="navbar-brand" href="#"><i class="bi bi-book-half"></i> Boky</a>
+            <ul class="navbar-nav me-auto">
+                <li class="nav-item"><a class="nav-link" th:href="@{/user/dashboard/{id}(id=${userId})}">Catalogue</a></li>
+                <li class="nav-item"><a class="nav-link" th:href="@{/user/mes-prets}">Mes Prêts</a></li>
+                <li class="nav-item"><a class="nav-link" th:href="@{/user/mes-reservations}">Mes Réservations</a></li>
+                <li class="nav-item"><a class="nav-link active" href="#">Mes Pénalités</a></li>
+            </ul>
+            <form th:action="@{/logout}" method="post">
+                <button type="submit" class="btn btn-outline-primary"><i class="bi bi-box-arrow-right"></i> Se déconnecter</button>
+            </form>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        <div class="hero-section">
+            <div class="p-4 p-md-5">
+                <h1 class="display-5"><i class="bi bi-currency-euro"></i> Mes Pénalités</h1>
+                <p class="lead">Consultez ici l'historique de vos pénalités de retard.</p>
+            </div>
+        </div>
+
+        <div class="main-card mt-4">
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle mb-0">
+                        <thead>
+                            <tr>
+                                <th>Livre en retard</th>
+                                <th>Date du calcul</th>
+                                <th>Jours de retard</th>
+                                <th>Montant</th>
+                                <th>Statut du paiement</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- On colore la ligne en rouge si la pénalité est impayée -->
+                            <tr th:each="penalite : ${penalites}" 
+                                th:classappend="${penalite.statutPaiement.name() == 'impaye'} ? 'table-danger' : ''">
+                                
+                                <td class="fw-bold" th:text="${penalite.pret.livre.titre}">Titre du Livre</td>
+                                <td th:text="${#temporals.format(penalite.dateCalcul, 'dd/MM/yyyy')}"></td>
+                                <td th:text="${penalite.joursRetard}"></td>
+                                <td th:text="${#numbers.formatCurrency(penalite.montant)}"></td>
+                                <td>
+                                    <span class="badge" th:classappend="${penalite.statutPaiement.name() == 'impaye'} ? 'bg-danger' : 'bg-success'">
+                                        <i class="bi me-1" th:classappend="${penalite.statutPaiement.name() == 'impaye'} ? 'bi-x-circle-fill' : 'bi-check-circle-fill'"></i>
+                                        <span th:text="${penalite.statutPaiement.name()}"></span>
+                                    </span>
+                                </td>
+                            </tr>
+                            <tr th:if="${#lists.isEmpty(penalites)}">
+                                <td colspan="5" class="text-center p-4 text-muted">
+                                    <i class="bi bi-trophy-fill fs-3"></i>
+                                    <div class="mt-2">Félicitations, vous n'avez aucune pénalité !</div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        
+        <div class="alert alert-info mt-4 d-flex align-items-center">
+             <i class="bi bi-info-circle-fill me-2"></i>
+             <div>
+                 Si vous avez des pénalités impayées, veuillez vous adresser à un administrateur pour les régler. 
+                 Tout nouvel emprunt est bloqué jusqu'au paiement.
+             </div>
+        </div>
+    </div>
+
+    <footer class="py-3 my-4">
+        <p class="text-center text-muted">© 2025 Gestion Prêt Bibliothèque</p>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
