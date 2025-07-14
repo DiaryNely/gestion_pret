@@ -59,8 +59,6 @@ public class AdminService {
         return pretRepository.findAll();
     }
 
-    // Dans AdminService.java
-
     public List<Prolongation> getDemandesEnAttente() {
         return prolongationRepository.findByStatut(StatutProlongation.en_attente);
     }
@@ -70,7 +68,7 @@ public class AdminService {
         Prolongation demande = prolongationRepository.findById(prolongationId)
                 .orElseThrow(() -> new Exception("Demande de prolongation non trouvée."));
 
-        Adherent admin = new Adherent(); // Simule la récupération de l'admin
+        Adherent admin = new Adherent();
         admin.setId(adminId);
         demande.setApprouvePar(admin);
         demande.setDateApprobation(LocalDate.now());
@@ -81,7 +79,6 @@ public class AdminService {
             switch (action) {
                 case "approuver" -> {
                     demande.setStatut(StatutProlongation.approuvee);
-                    // Mettre à jour la date de retour du prêt original
                     Pret pret = demande.getPret();
                     pret.setDateRetourPrevue(demande.getNouvelleDateRetour());
                     pretRepository.save(pret);

@@ -49,9 +49,7 @@ public class UserService {
                     criteriaBuilder.like(criteriaBuilder.lower(root.get("titre")), searchTerm),
                     criteriaBuilder.like(criteriaBuilder.lower(root.get("auteur")), searchTerm),
                     criteriaBuilder.like(criteriaBuilder.lower(root.get("motsCles")), searchTerm),
-                    criteriaBuilder.like(criteriaBuilder.lower(root.get("isbn")), searchTerm) // Ajout de la recherche
-                                                                                              // par ISBN
-            );
+                    criteriaBuilder.like(criteriaBuilder.lower(root.get("isbn")), searchTerm));
 
             predicates.add(searchPredicate);
 
