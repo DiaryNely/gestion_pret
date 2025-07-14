@@ -8,5 +8,4 @@ import com.bibliotheque.gestion_pret.model.Livre;
 
 @Repository
 public interface LivreRepository extends JpaRepository<Livre, Long>, JpaSpecificationExecutor<Livre> {
-    // Pour l'instant, les méthodes de base de JpaRepository suffisent.
 }

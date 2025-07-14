@@ -185,7 +185,7 @@
         <hr>
         <ul class="nav flex-column">
             <li class="nav-item">
-                <a class="nav-link text-white active" href="#">
+                <a class="nav-link" th:href="@{/admin/dashboard}">
                     <i class="bi bi-speedometer2"></i> Tableau de bord
                 </a>
             </li>
@@ -275,7 +275,7 @@
                                 <strong th:text="${pret.livre?.titre}">Titre du livre</strong><br>
                                 <small class="text-muted">
                                     par <span th:text="${pret.adherent?.prenom + ' ' + pret.adherent?.nom}"></span>
-                                    le <span th:text="${#dates.format(pret.dateEmprunt, 'dd/MM/yyyy')}"></span>
+                                    le <span th:text="${#temporals.format(pret.dateEmprunt, 'dd/MM/yyyy')}"></span>
                                 </small>
                             </li>
                         </ul>
@@ -297,7 +297,7 @@
                                         th:text="${pret.adherent?.prenom + ' ' + pret.adherent?.nom}"></small>
                                 </div>
                                 <span class="badge bg-danger rounded-pill"
-                                    th:text="'Retour prévu le ' + ${#dates.format(pret.dateRetourPrevue, 'dd/MM/yyyy')}">En
+                                    th:text="'Retour prévu le ' + ${#temporals.format(pret.dateRetourPrevue, 'dd/MM/yyyy')}">En
                                     retard</span>
                             </li>
                             <li th:if="${#lists.isEmpty(stats.listePretsEnRetard)}" class="list-group-item">

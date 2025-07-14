@@ -23,7 +23,7 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
     @Autowired
     private AdherentRepository adherentRepository;
 
-    private RedirectStrategy redirectStrategy = new DefaultRedirectStrategy();
+    private final RedirectStrategy redirectStrategy = new DefaultRedirectStrategy();
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request,
@@ -43,23 +43,17 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
     protected String determineTargetUrl(Authentication authentication) {
         Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
 
-        // Si l'utilisateur a le rôle ADMIN
         if (authorities.stream().anyMatch(grantedAuthority -> grantedAuthority.getAuthority().equals("ROLE_ADMIN"))) {
             return "/admin/dashboard";
         }
 
-        // Pour tous les autres utilisateurs authentifiés
         else {
-            // On récupère l'email de l'utilisateur connecté
             String username = ((User) authentication.getPrincipal()).getUsername();
-            // On cherche l'adhérent en base pour récupérer son ID
             Adherent adherent = adherentRepository.findByEmail(username).orElse(null);
 
             if (adherent != null) {
-                // On redirige vers une page utilisateur avec son ID
                 return "/user/dashboard/" + adherent.getId();
             } else {
-                // Cas d'erreur peu probable mais à gérer
                 return "/login?error";
             }
         }

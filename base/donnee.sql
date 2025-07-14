@@ -122,6 +122,9 @@ INSERT INTO parametres_systeme (nom, valeur, type_valeur, description, modifiabl
 ('bibliotheque_telephone', '01.23.45.67.89', 'string', 'Téléphone de la bibliothèque', true),
 ('bibliotheque_email', 'contact@bibliotheque.fr', 'string', 'Email de la bibliothèque', true);
 
+
+
+
 -- Prolongations
 INSERT INTO prolongations (pret_id, ancienne_date_retour, nouvelle_date_retour, motif, demande_par, approuve_par, date_demande, date_approbation, statut) VALUES
 (2, '2024-12-26', '2025-01-02', 'Besoin de plus de temps pour la lecture', 2, 6, '2024-12-20', '2024-12-20', 'approuvee'),

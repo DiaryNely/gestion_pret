@@ -183,7 +183,7 @@
         <hr>
         <ul class="nav flex-column">
             <li class="nav-item">
-                <a class="nav-link text-white active" href="#">
+                <a class="nav-link" th:href="@{/admin/dashboard}">
                     <i class="bi bi-speedometer2"></i> Tableau de bord
                 </a>
             </li>
@@ -225,9 +225,9 @@
                 <tr th:each="demande : ${demandes}">
                     <td th:text="${demande.pret.livre.titre}"></td>
                     <td th:text="${demande.demandePar.prenom + ' ' + demande.demandePar.nom}"></td>
-                    <td th:text="${#dates.format(demande.dateDemande, 'dd/MM/yyyy')}"></td>
-                    <td th:text="${#dates.format(demande.ancienneDateRetour, 'dd/MM/yyyy')}"></td>
-                    <td th:text="${#dates.format(demande.nouvelleDateRetour, 'dd/MM/yyyy')}"></td>
+                    <td th:text="${#temporals.format(demande.dateDemande, 'dd/MM/yyyy')}"></td>
+                    <td th:text="${#temporals.format(demande.ancienneDateRetour, 'dd/MM/yyyy')}"></td>
+                    <td th:text="${#temporals.format(demande.nouvelleDateRetour, 'dd/MM/yyyy')}"></td>
                     <td>
                         <form th:action="@{/admin/demandes/traiter}" method="post" style="display:inline;">
                             <input type="hidden" name="prolongationId" th:value="${demande.id}" />
