@@ -25,62 +25,51 @@
             --card-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
             --card-hover-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
         }
-
         * {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
         }
-
         body {
             background-color: var(--light-gray);
             color: var(--text-dark);
             line-height: 1.6;
         }
-
         .navbar {
             background-color: white !important;
             box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
             padding: 1rem 0;
         }
-
         .navbar-brand {
             font-weight: 700;
             font-size: 1.5rem;
             color: var(--primary-blue) !important;
         }
-
         .navbar-brand i {
             color: var(--primary-blue-light);
             margin-right: 0.5rem;
         }
-
         .nav-link {
             color: var(--text-dark) !important;
             font-weight: 500;
             padding: 0.5rem 1rem !important;
             transition: color 0.2s ease;
         }
-
         .nav-link:hover {
             color: var(--primary-blue) !important;
         }
-
         .nav-link.active {
             color: var(--primary-blue) !important;
             background-color: rgba(30, 64, 175, 0.1);
             border-radius: 0.375rem;
         }
-
         .btn-outline-primary {
             border-color: var(--primary-blue);
             color: var(--primary-blue);
             transition: all 0.2s ease;
         }
-
         .btn-outline-primary:hover {
             background-color: var(--primary-blue);
             border-color: var(--primary-blue);
         }
-
         .page-header {
             background: white;
             border-radius: 12px;
@@ -89,25 +78,21 @@
             border: 1px solid var(--border-color);
             padding: 2rem;
         }
-
         .page-header h1 {
             color: var(--text-dark);
             font-weight: 700;
             margin-bottom: 0.5rem;
             font-size: 2rem;
         }
-
         .page-header h1 i {
             color: var(--primary-blue-light);
             margin-right: 0.75rem;
         }
-
         .page-header .subtitle {
             color: var(--text-muted);
             font-size: 1.1rem;
             margin-bottom: 0;
         }
-
         .main-card {
             background: white;
             border-radius: 12px;
@@ -115,11 +100,9 @@
             border: 1px solid var(--border-color);
             overflow: hidden;
         }
-
         .table {
             margin-bottom: 0;
         }
-
         .table thead th {
             background-color: #f8fafc;
             border-bottom: 2px solid var(--border-color);
@@ -130,26 +113,21 @@
             letter-spacing: 0.025em;
             padding: 1rem;
         }
-
         .table tbody td {
             padding: 1rem;
             vertical-align: middle;
             border-bottom: 1px solid var(--border-color);
             color: var(--text-dark);
         }
-
         .table tbody tr:hover {
             background-color: #f8fafc;
         }
-
         .table-danger {
             background-color: #fef2f2 !important;
         }
-
         .table-danger:hover {
             background-color: #fecaca !important;
         }
-
         .badge {
             border-radius: 20px;
             padding: 0.5rem 0.875rem;
@@ -158,163 +136,205 @@
             text-transform: uppercase;
             letter-spacing: 0.025em;
         }
-
         .bg-primary {
             background-color: var(--primary-blue) !important;
         }
-
         .bg-success {
             background-color: var(--success-green) !important;
         }
-
         .bg-danger {
             background-color: var(--danger-red) !important;
         }
-
         .bg-info {
             background-color: var(--info-blue) !important;
         }
-
+        
+        /* CSS amélioré pour les boutons */
         .btn-sm {
-            padding: 0.375rem 0.75rem;
+            padding: 0.5rem 1rem;
             font-size: 0.875rem;
-            border-radius: 6px;
+            border-radius: 8px;
             font-weight: 500;
-            transition: all 0.2s ease;
-            margin-right: 0.5rem;
+            transition: all 0.3s ease;
+            margin-right: 0.25rem;
+            margin-bottom: 0.25rem;
+            border: 2px solid transparent;
+            position: relative;
+            overflow: hidden;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
-
+        
+        .btn-sm:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+        
+        .btn-sm:active {
+            transform: translateY(-1px);
+        }
+        
         .btn-info {
-            background-color: var(--info-blue);
-            border-color: var(--info-blue);
+            background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%);
+            border-color: #0ea5e9;
             color: white;
         }
-
+        
         .btn-info:hover {
-            background-color: #0284c7;
+            background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);
             border-color: #0284c7;
-            transform: translateY(-1px);
-        }
-
-        .btn-success {
-            background-color: var(--success-green);
-            border-color: var(--success-green);
             color: white;
         }
-
+        
+        .btn-info:focus {
+            box-shadow: 0 0 0 0.2rem rgba(14, 165, 233, 0.25);
+        }
+        
+        .btn-success {
+            background: linear-gradient(135deg, #059669 0%, #047857 100%);
+            border-color: #059669;
+            color: white;
+        }
+        
         .btn-success:hover {
-            background-color: #047857;
+            background: linear-gradient(135deg, #047857 0%, #065f46 100%);
             border-color: #047857;
+            color: white;
+        }
+        
+        .btn-success:focus {
+            box-shadow: 0 0 0 0.2rem rgba(5, 150, 105, 0.25);
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #1e40af 0%, #1e3a8a 100%);
+            border-color: #1e40af;
+            padding: 0.75rem 1.5rem;
+            font-weight: 600;
+            border-radius: 8px;
+        }
+        
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #1e3a8a 0%, #1e3a8a 100%);
+            border-color: #1e3a8a;
             transform: translateY(-1px);
         }
-
+        
+        .btn-secondary {
+            background: linear-gradient(135deg, #6b7280 0%, #4b5563 100%);
+            border-color: #6b7280;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            font-weight: 500;
+            border-radius: 8px;
+        }
+        
+        .btn-secondary:hover {
+            background: linear-gradient(135deg, #4b5563 0%, #374151 100%);
+            border-color: #4b5563;
+            color: white;
+            transform: translateY(-1px);
+        }
+        
+        .btn-outline-light {
+            border: 2px solid rgba(255, 255, 255, 0.5);
+            color: rgba(255, 255, 255, 0.9);
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+        
+        .btn-outline-light:hover {
+            background: rgba(255, 255, 255, 0.2);
+            border-color: rgba(255, 255, 255, 0.8);
+            color: white;
+            transform: translateY(-1px);
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        
+        /* Animations pour les icônes */
+        .btn-sm i {
+            transition: transform 0.3s ease;
+        }
+        
+        .btn-sm:hover i {
+            transform: scale(1.1);
+        }
+        
+        .btn-info:hover i {
+            animation: pulse 0.6s ease-in-out;
+        }
+        
+        .btn-success:hover i {
+            animation: checkmark 0.6s ease-in-out;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+        }
+        
+        @keyframes checkmark {
+            0% { transform: scale(1) rotate(0deg); }
+            50% { transform: scale(1.1) rotate(180deg); }
+            100% { transform: scale(1) rotate(360deg); }
+        }
+        
+        /* Responsive design pour les boutons */
+        @media (max-width: 768px) {
+            .btn-sm {
+                padding: 0.4rem 0.8rem;
+                font-size: 0.8rem;
+                margin-right: 0.2rem;
+            }
+            
+            .action-buttons {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .btn-sm {
+                margin-right: 0;
+                margin-bottom: 0.5rem;
+            }
+        }
+        
         .empty-state {
             text-align: center;
             padding: 3rem 2rem;
             color: var(--text-muted);
         }
-
         .empty-state i {
             font-size: 3rem;
             margin-bottom: 1rem;
             color: var(--secondary-gray);
         }
-
         .empty-state h3 {
             color: var(--text-dark);
             font-weight: 600;
             margin-bottom: 0.5rem;
         }
-
         .empty-state p {
             margin-bottom: 0;
         }
-
-        .stats-row {
-            background: white;
-            border-radius: 12px;
-            box-shadow: var(--card-shadow);
-            border: 1px solid var(--border-color);
-            margin-bottom: 2rem;
-            padding: 1.5rem;
-        }
-
-        .stat-card {
-            text-align: center;
-            padding: 1rem;
-        }
-
-        .stat-card .stat-number {
-            font-size: 2rem;
-            font-weight: 700;
-            color: var(--primary-blue);
-            margin-bottom: 0.5rem;
-        }
-
-        .stat-card .stat-label {
-            color: var(--text-muted);
-            font-size: 0.875rem;
-            font-weight: 500;
-            text-transform: uppercase;
-            letter-spacing: 0.025em;
-        }
-
-        .date-cell {
-            font-family: 'Monaco', 'Menlo', monospace;
-            font-size: 0.875rem;
-            color: var(--text-muted);
-        }
-
-        .book-title {
-            font-weight: 600;
-            color: var(--text-dark);
-        }
-
         footer {
             background-color: white;
             border-top: 1px solid var(--border-color);
             margin-top: 3rem;
             padding: 2rem 0;
         }
-
         footer p {
             color: var(--text-muted);
             margin-bottom: 0;
-        }
-
-        .action-buttons {
-            display: flex;
-            gap: 0.5rem;
-            flex-wrap: wrap;
-        }
-
-        @media (max-width: 768px) {
-            .page-header {
-                padding: 1.5rem;
-                margin-bottom: 1.5rem;
-            }
-
-            .page-header h1 {
-                font-size: 1.5rem;
-            }
-
-            .table-responsive {
-                font-size: 0.875rem;
-            }
-
-            .btn-sm {
-                padding: 0.25rem 0.5rem;
-                font-size: 0.75rem;
-            }
-
-            .action-buttons {
-                flex-direction: column;
-            }
-
-            .action-buttons .btn {
-                margin-right: 0;
-                margin-bottom: 0.25rem;
-            }
         }
     </style>
 </head>
@@ -330,17 +350,15 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                    <!-- Lien vers le catalogue (n'est plus la page active) -->
                     <li class="nav-item">
                         <a class="nav-link" th:href="@{/user/dashboard/{id}(id=${userId})}">Catalogue</a>
                     </li>
-                    <!-- Lien "Mes Prêts" est maintenant actif -->
                     <li class="nav-item">
                         <a class="nav-link active" href="#">Mes Prêts</a>
                     </li>
                 </ul>
                 <form th:action="@{/logout}" method="post">
-                    <button type="submit" class="btn btn-outline-light">
+                    <button type="submit" class="btn btn-outline-primary">
                         <i class="bi bi-box-arrow-right"></i> Se déconnecter
                     </button>
                 </form>
@@ -352,7 +370,7 @@
     <div class="container mt-4">
         <h1 class="mb-4"><i class="bi bi-list-task"></i> Mon Historique de Prêts</h1>
 
-        <!-- Zone pour les messages de succès ou d'erreur flashés depuis le contrôleur -->
+        <!-- Zone pour les messages de succès ou d'erreur -->
         <div th:if="${successMessage}" class="alert alert-success" role="alert" th:text="${successMessage}"></div>
         <div th:if="${errorMessage}" class="alert alert-danger" role="alert" th:text="${errorMessage}"></div>
 
@@ -375,7 +393,6 @@
                             <tr th:each="pret : ${prets}"
                                 th:classappend="${pret.statutPret?.nom == 'En retard'} ? 'table-danger' : ''">
                                 <td th:text="${pret.livre?.titre}">Titre du Livre</td>
-
                                 <td th:text="${#temporals.format(pret.dateEmprunt, 'dd/MM/yyyy')}"></td>
                                 <td th:text="${#temporals.format(pret.dateRetourPrevue, 'dd/MM/yyyy')}"></td>
                                 <td
@@ -387,22 +404,28 @@
                                         <span th:case="'En cours'" class="badge bg-primary">En cours</span>
                                         <span th:case="'Retourné'" class="badge bg-success">Retourné</span>
                                         <span th:case="'En retard'" class="badge bg-danger">En retard</span>
+                                        <span th:case="*" class="badge bg-secondary" th:text="${pret.statutPret?.nom}"></span>
                                     </span>
                                 </td>
-                                <td class="text-center">
-                                    <!-- Affiche le bouton "Prolonger" si le prêt est en cours -->
-                                    <button th:if="${pret.statutPret?.nom == 'En cours'}" class="btn btn-sm btn-info"
-                                        title="Prolonger le prêt">
-                                        <i class="bi bi-calendar-plus"></i>
+                                <td class="text-center action-buttons">
+                                    <!-- Bouton pour ouvrir le modal de prolongation -->
+                                    <button th:if="${pret.statutPret?.nom == 'En cours'}"
+                                        type="button"
+                                        class="btn btn-sm btn-info"
+                                        title="Prolonger le prêt"
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#prolongerPretModal"
+                                        th:attr="data-pret-id=${pret.id}, data-livre-titre=${pret.livre?.titre}">
+                                        <i class="bi bi-calendar-plus"></i> Prolonger
                                     </button>
 
-                                    <!-- Affiche le bouton "Rendre" si le prêt n'est pas déjà retourné -->
+                                    <!-- Bouton pour ouvrir le modal de retour -->
                                     <button
                                         th:if="${pret.statutPret?.nom == 'En cours' or pret.statutPret?.nom == 'En retard'}"
-                                        type="button" class="btn btn-sm btn-success btn-rendre" title="Rendre ce livre"
+                                        type="button" class="btn btn-sm btn-success" title="Rendre ce livre"
                                         data-bs-toggle="modal" data-bs-target="#rendreLivreModal"
                                         th:attr="data-pret-id=${pret.id}, data-livre-titre=${pret.livre?.titre}">
-                                        <i class="bi bi-check2-circle"></i>
+                                        <i class="bi bi-check2-circle"></i> Rendre
                                     </button>
                                 </td>
                             </tr>
@@ -417,27 +440,19 @@
         </div>
     </div>
 
-    <!-- ================================== -->
-    <!-- MODAL POUR RENDRE UN LIVRE         -->
-    <!-- Ce code est initialement caché     -->
-    <!-- ================================== -->
+    <!-- Modal pour Rendre un livre -->
     <div class="modal fade" id="rendreLivreModal" tabindex="-1" aria-labelledby="rendreLivreModalLabel"
         aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
-                <!-- Le formulaire envoie les données à notre nouvelle route POST /user/rendre -->
                 <form th:action="@{/user/rendre}" method="post">
                     <div class="modal-header">
                         <h5 class="modal-title" id="rendreLivreModalLabel">Rendre un livre</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        <p>Vous êtes sur le point de rendre le livre : <strong id="livreTitreModal">Titre du livre
-                                ici</strong>.</p>
-
-                        <!-- Champ caché pour envoyer l'ID du prêt au contrôleur -->
+                        <p>Vous êtes sur le point de rendre le livre : <strong id="livreTitreModal"></strong>.</p>
                         <input type="hidden" name="pretId" id="pretIdModal" value="">
-
                         <div class="mb-3">
                             <label for="dateRetour" class="form-label fw-bold">Veuillez sélectionner la date de retour
                                 réelle :</label>
@@ -453,45 +468,79 @@
         </div>
     </div>
 
+    <!-- Modal pour Demander une prolongation -->
+    <div class="modal fade" id="prolongerPretModal" tabindex="-1" aria-labelledby="prolongerPretModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <!-- Le formulaire pointe vers la route POST /user/prolonger -->
+                <form th:action="@{/user/prolonger}" method="post">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="prolongerPretModalLabel">Demander une prolongation</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p>Vous demandez une prolongation pour le livre : <strong id="prolongerLivreTitreModal"></strong>.</p>
+
+                        <!-- Champ caché pour l'ID du prêt -->
+                        <input type="hidden" name="pretId" id="prolongerPretIdModal" value="">
+
+                        <!-- Champ pour le motif de la demande -->
+                        <div class="mb-3">
+                            <label for="motif" class="form-label fw-bold">Motif de la demande (obligatoire) :</label>
+                            <textarea class="form-control" id="motif" name="motif" rows="4" placeholder="Ex: Je n'ai pas encore terminé ma lecture..." required></textarea>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+                        <button type="submit" class="btn btn-info">Envoyer la demande</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
 
     <!-- Pied de page -->
     <footer class="py-3 my-4">
         <p class="text-center text-muted">© 2025 Gestion Prêt Bibliothèque</p>
     </footer>
 
-    <!-- ================================== -->
-    <!-- SCRIPTS JAVASCRIPT                 -->
-    <!-- ================================== -->
+    <!-- Scripts JavaScript -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        // Attend que tout le contenu de la page soit chargé
         document.addEventListener('DOMContentLoaded', function () {
 
-            // Sélectionne le modal par son ID
+            // Logique pour le modal "Rendre un livre"
             const rendreModal = document.getElementById('rendreLivreModal');
-
             if (rendreModal) {
-                // Ajoute un écouteur d'événement qui se déclenche juste avant que le modal ne s'affiche
                 rendreModal.addEventListener('show.bs.modal', function (event) {
-
-                    // 'event.relatedTarget' est le bouton spécifique qui a déclenché le modal
                     const button = event.relatedTarget;
-
-                    // On récupère les données des attributs 'data-*' du bouton cliqué
                     const pretId = button.getAttribute('data-pret-id');
                     const livreTitre = button.getAttribute('data-livre-titre');
-
-                    // On sélectionne les éléments à l'intérieur du modal
                     const modalTitreLivre = rendreModal.querySelector('#livreTitreModal');
                     const modalInputPretId = rendreModal.querySelector('#pretIdModal');
-
-                    // On met à jour le contenu du modal avec les données du prêt
                     modalTitreLivre.textContent = livreTitre;
                     modalInputPretId.value = pretId;
-
-                    // On met la date d'aujourd'hui par défaut dans le champ date
                     const dateInput = rendreModal.querySelector('#dateRetour');
                     dateInput.valueAsDate = new Date();
+                });
+            }
+
+            // Logique pour le modal "Demander une prolongation"
+            const prolongerModal = document.getElementById('prolongerPretModal');
+            if (prolongerModal) {
+                prolongerModal.addEventListener('show.bs.modal', function (event) {
+                    const button = event.relatedTarget;
+                    const pretId = button.getAttribute('data-pret-id');
+                    const livreTitre = button.getAttribute('data-livre-titre');
+                    const modalTitreLivre = prolongerModal.querySelector('#prolongerLivreTitreModal');
+                    const modalInputPretId = prolongerModal.querySelector('#prolongerPretIdModal');
+                    const motifTextarea = prolongerModal.querySelector('#motif');
+                    
+                    modalTitreLivre.textContent = livreTitre;
+                    modalInputPretId.value = pretId;
+                    motifTextarea.value = ''; // Vider le champ de texte
                 });
             }
         });

@@ -8,7 +8,7 @@ import com.bibliotheque.gestion_pret.enums.StatutProlongation;
 import com.bibliotheque.gestion_pret.model.Prolongation;
 
 public interface ProlongationRepository extends JpaRepository<Prolongation, Long> {
-    long countByPret_IdAndStatut(Long pretId, String statut);
+    long countByPret_IdAndStatut(Long pretId, StatutProlongation statut);
 
     List<Prolongation> findByStatut(StatutProlongation statut);
 }

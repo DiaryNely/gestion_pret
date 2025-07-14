@@ -33,7 +33,8 @@ public class ProlongationService {
                 .orElse(new ParametreSysteme("max_prolongations", "1"));
         long maxProlongations = Long.parseLong(maxProlongationsParam.getValeur());
 
-        long prolongationsDejaApprouvees = prolongationRepository.countByPret_IdAndStatut(pretId, "approuvee");
+        long prolongationsDejaApprouvees = prolongationRepository.countByPret_IdAndStatut(pretId,
+                StatutProlongation.approuvee);
 
         if (prolongationsDejaApprouvees >= maxProlongations) {
             throw new Exception(
