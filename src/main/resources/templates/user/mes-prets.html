@@ -25,51 +25,62 @@
             --card-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
             --card-hover-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
         }
+
         * {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
         }
+
         body {
             background-color: var(--light-gray);
             color: var(--text-dark);
             line-height: 1.6;
         }
+
         .navbar {
             background-color: white !important;
             box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
             padding: 1rem 0;
         }
+
         .navbar-brand {
             font-weight: 700;
             font-size: 1.5rem;
             color: var(--primary-blue) !important;
         }
+
         .navbar-brand i {
             color: var(--primary-blue-light);
             margin-right: 0.5rem;
         }
+
         .nav-link {
             color: var(--text-dark) !important;
             font-weight: 500;
             padding: 0.5rem 1rem !important;
             transition: color 0.2s ease;
         }
+
         .nav-link:hover {
             color: var(--primary-blue) !important;
         }
+
         .nav-link.active {
             color: var(--primary-blue) !important;
             background-color: rgba(30, 64, 175, 0.1);
             border-radius: 0.375rem;
         }
+
         .btn-outline-primary {
             border-color: var(--primary-blue);
             color: var(--primary-blue);
             transition: all 0.2s ease;
         }
+
         .btn-outline-primary:hover {
             background-color: var(--primary-blue);
             border-color: var(--primary-blue);
         }
+
         .page-header {
             background: white;
             border-radius: 12px;
@@ -78,21 +89,25 @@
             border: 1px solid var(--border-color);
             padding: 2rem;
         }
+
         .page-header h1 {
             color: var(--text-dark);
             font-weight: 700;
             margin-bottom: 0.5rem;
             font-size: 2rem;
         }
+
         .page-header h1 i {
             color: var(--primary-blue-light);
             margin-right: 0.75rem;
         }
+
         .page-header .subtitle {
             color: var(--text-muted);
             font-size: 1.1rem;
             margin-bottom: 0;
         }
+
         .main-card {
             background: white;
             border-radius: 12px;
@@ -100,9 +115,11 @@
             border: 1px solid var(--border-color);
             overflow: hidden;
         }
+
         .table {
             margin-bottom: 0;
         }
+
         .table thead th {
             background-color: #f8fafc;
             border-bottom: 2px solid var(--border-color);
@@ -113,21 +130,26 @@
             letter-spacing: 0.025em;
             padding: 1rem;
         }
+
         .table tbody td {
             padding: 1rem;
             vertical-align: middle;
             border-bottom: 1px solid var(--border-color);
             color: var(--text-dark);
         }
+
         .table tbody tr:hover {
             background-color: #f8fafc;
         }
+
         .table-danger {
             background-color: #fef2f2 !important;
         }
+
         .table-danger:hover {
             background-color: #fecaca !important;
         }
+
         .badge {
             border-radius: 20px;
             padding: 0.5rem 0.875rem;
@@ -136,19 +158,23 @@
             text-transform: uppercase;
             letter-spacing: 0.025em;
         }
+
         .bg-primary {
             background-color: var(--primary-blue) !important;
         }
+
         .bg-success {
             background-color: var(--success-green) !important;
         }
+
         .bg-danger {
             background-color: var(--danger-red) !important;
         }
+
         .bg-info {
             background-color: var(--info-blue) !important;
         }
-        
+
         /* CSS amélioré pour les boutons */
         .btn-sm {
             padding: 0.5rem 1rem;
@@ -167,48 +193,48 @@
             gap: 0.5rem;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
-        
+
         .btn-sm:hover {
             transform: translateY(-2px);
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
         }
-        
+
         .btn-sm:active {
             transform: translateY(-1px);
         }
-        
+
         .btn-info {
             background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%);
             border-color: #0ea5e9;
             color: white;
         }
-        
+
         .btn-info:hover {
             background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);
             border-color: #0284c7;
             color: white;
         }
-        
+
         .btn-info:focus {
             box-shadow: 0 0 0 0.2rem rgba(14, 165, 233, 0.25);
         }
-        
+
         .btn-success {
             background: linear-gradient(135deg, #059669 0%, #047857 100%);
             border-color: #059669;
             color: white;
         }
-        
+
         .btn-success:hover {
             background: linear-gradient(135deg, #047857 0%, #065f46 100%);
             border-color: #047857;
             color: white;
         }
-        
+
         .btn-success:focus {
             box-shadow: 0 0 0 0.2rem rgba(5, 150, 105, 0.25);
         }
-        
+
         .btn-primary {
             background: linear-gradient(135deg, #1e40af 0%, #1e3a8a 100%);
             border-color: #1e40af;
@@ -216,13 +242,13 @@
             font-weight: 600;
             border-radius: 8px;
         }
-        
+
         .btn-primary:hover {
             background: linear-gradient(135deg, #1e3a8a 0%, #1e3a8a 100%);
             border-color: #1e3a8a;
             transform: translateY(-1px);
         }
-        
+
         .btn-secondary {
             background: linear-gradient(135deg, #6b7280 0%, #4b5563 100%);
             border-color: #6b7280;
@@ -231,14 +257,14 @@
             font-weight: 500;
             border-radius: 8px;
         }
-        
+
         .btn-secondary:hover {
             background: linear-gradient(135deg, #4b5563 0%, #374151 100%);
             border-color: #4b5563;
             color: white;
             transform: translateY(-1px);
         }
-        
+
         .btn-outline-light {
             border: 2px solid rgba(255, 255, 255, 0.5);
             color: rgba(255, 255, 255, 0.9);
@@ -246,49 +272,64 @@
             backdrop-filter: blur(10px);
             transition: all 0.3s ease;
         }
-        
+
         .btn-outline-light:hover {
             background: rgba(255, 255, 255, 0.2);
             border-color: rgba(255, 255, 255, 0.8);
             color: white;
             transform: translateY(-1px);
         }
-        
+
         .action-buttons {
             display: flex;
             gap: 0.5rem;
             flex-wrap: wrap;
             justify-content: center;
         }
-        
+
         /* Animations pour les icônes */
         .btn-sm i {
             transition: transform 0.3s ease;
         }
-        
+
         .btn-sm:hover i {
             transform: scale(1.1);
         }
-        
+
         .btn-info:hover i {
             animation: pulse 0.6s ease-in-out;
         }
-        
+
         .btn-success:hover i {
             animation: checkmark 0.6s ease-in-out;
         }
-        
+
         @keyframes pulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.2); }
+
+            0%,
+            100% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.2);
+            }
         }
-        
+
         @keyframes checkmark {
-            0% { transform: scale(1) rotate(0deg); }
-            50% { transform: scale(1.1) rotate(180deg); }
-            100% { transform: scale(1) rotate(360deg); }
+            0% {
+                transform: scale(1) rotate(0deg);
+            }
+
+            50% {
+                transform: scale(1.1) rotate(180deg);
+            }
+
+            100% {
+                transform: scale(1) rotate(360deg);
+            }
         }
-        
+
         /* Responsive design pour les boutons */
         @media (max-width: 768px) {
             .btn-sm {
@@ -296,42 +337,47 @@
                 font-size: 0.8rem;
                 margin-right: 0.2rem;
             }
-            
+
             .action-buttons {
                 flex-direction: column;
                 align-items: stretch;
             }
-            
+
             .btn-sm {
                 margin-right: 0;
                 margin-bottom: 0.5rem;
             }
         }
-        
+
         .empty-state {
             text-align: center;
             padding: 3rem 2rem;
             color: var(--text-muted);
         }
+
         .empty-state i {
             font-size: 3rem;
             margin-bottom: 1rem;
             color: var(--secondary-gray);
         }
+
         .empty-state h3 {
             color: var(--text-dark);
             font-weight: 600;
             margin-bottom: 0.5rem;
         }
+
         .empty-state p {
             margin-bottom: 0;
         }
+
         footer {
             background-color: white;
             border-top: 1px solid var(--border-color);
             margin-top: 3rem;
             padding: 2rem 0;
         }
+
         footer p {
             color: var(--text-muted);
             margin-bottom: 0;
@@ -355,6 +401,9 @@
                     </li>
                     <li class="nav-item">
                         <a class="nav-link active" href="#">Mes Prêts</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/user/mes-reservations}">Mes Réservations</a>
                     </li>
                 </ul>
                 <form th:action="@{/logout}" method="post">
@@ -404,16 +453,14 @@
                                         <span th:case="'En cours'" class="badge bg-primary">En cours</span>
                                         <span th:case="'Retourné'" class="badge bg-success">Retourné</span>
                                         <span th:case="'En retard'" class="badge bg-danger">En retard</span>
-                                        <span th:case="*" class="badge bg-secondary" th:text="${pret.statutPret?.nom}"></span>
+                                        <span th:case="*" class="badge bg-secondary"
+                                            th:text="${pret.statutPret?.nom}"></span>
                                     </span>
                                 </td>
                                 <td class="text-center action-buttons">
                                     <!-- Bouton pour ouvrir le modal de prolongation -->
-                                    <button th:if="${pret.statutPret?.nom == 'En cours'}"
-                                        type="button"
-                                        class="btn btn-sm btn-info"
-                                        title="Prolonger le prêt"
-                                        data-bs-toggle="modal"
+                                    <button th:if="${pret.statutPret?.nom == 'En cours'}" type="button"
+                                        class="btn btn-sm btn-info" title="Prolonger le prêt" data-bs-toggle="modal"
                                         data-bs-target="#prolongerPretModal"
                                         th:attr="data-pret-id=${pret.id}, data-livre-titre=${pret.livre?.titre}">
                                         <i class="bi bi-calendar-plus"></i> Prolonger
@@ -480,7 +527,8 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        <p>Vous demandez une prolongation pour le livre : <strong id="prolongerLivreTitreModal"></strong>.</p>
+                        <p>Vous demandez une prolongation pour le livre : <strong
+                                id="prolongerLivreTitreModal"></strong>.</p>
 
                         <!-- Champ caché pour l'ID du prêt -->
                         <input type="hidden" name="pretId" id="prolongerPretIdModal" value="">
@@ -488,7 +536,8 @@
                         <!-- Champ pour le motif de la demande -->
                         <div class="mb-3">
                             <label for="motif" class="form-label fw-bold">Motif de la demande (obligatoire) :</label>
-                            <textarea class="form-control" id="motif" name="motif" rows="4" placeholder="Ex: Je n'ai pas encore terminé ma lecture..." required></textarea>
+                            <textarea class="form-control" id="motif" name="motif" rows="4"
+                                placeholder="Ex: Je n'ai pas encore terminé ma lecture..." required></textarea>
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -537,7 +586,7 @@
                     const modalTitreLivre = prolongerModal.querySelector('#prolongerLivreTitreModal');
                     const modalInputPretId = prolongerModal.querySelector('#prolongerPretIdModal');
                     const motifTextarea = prolongerModal.querySelector('#motif');
-                    
+
                     modalTitreLivre.textContent = livreTitre;
                     modalInputPretId.value = pretId;
                     motifTextarea.value = ''; // Vider le champ de texte
