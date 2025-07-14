@@ -7,14 +7,17 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.bibliotheque.gestion_pret.enums.StatutPaiementAdherent;
+import com.bibliotheque.gestion_pret.enums.StatutReservation;
 import com.bibliotheque.gestion_pret.model.Adherent;
 import com.bibliotheque.gestion_pret.model.Livre;
 import com.bibliotheque.gestion_pret.model.Pret;
+import com.bibliotheque.gestion_pret.model.Reservation;
 import com.bibliotheque.gestion_pret.model.StatutPret;
 import com.bibliotheque.gestion_pret.model.TypePret;
 import com.bibliotheque.gestion_pret.repository.AdherentRepository;
 import com.bibliotheque.gestion_pret.repository.LivreRepository;
 import com.bibliotheque.gestion_pret.repository.PretRepository;
+import com.bibliotheque.gestion_pret.repository.ReservationRepository;
 import com.bibliotheque.gestion_pret.repository.StatutPretRepository;
 import com.bibliotheque.gestion_pret.repository.TypePretRepository;
 
@@ -31,6 +34,11 @@ public class PretService {
         private StatutPretRepository statutPretRepository;
         @Autowired
         private TypePretRepository typePretRepository;
+        @Autowired
+        private ReservationService reservationService;
+
+        @Autowired
+        private ReservationRepository reservationRepository;
 
         @Transactional
         public void emprunterLivre(Long adherentId, Long livreId, Long typePretId) throws Exception {
@@ -80,8 +88,8 @@ public class PretService {
 
                 pretRepository.save(nouveauPret);
 
-                livre.setNombreExemplaires(livre.getNombreExemplaires() - 1);
-                livreRepository.save(livre);
+                // livre.setNombreExemplaires(livre.getNombreExemplaires() - 1);
+                // livreRepository.save(livre);
         }
 
         @Transactional
@@ -105,9 +113,39 @@ public class PretService {
                 pret.setStatutPret(statutRetourne);
 
                 pretRepository.save(pret);
+                Livre livreRetourne = pret.getLivre();
 
-                Livre livre = pret.getLivre();
-                livre.setNombreExemplaires(livre.getNombreExemplaires() + 1);
-                livreRepository.save(livre);
+                reservationService.traiterRetourLivre(livreRetourne);
+        }
+
+        @Transactional
+        public void emprunterLivreReserve(Long reservationId, Long adherentId, Long typePretId) throws Exception {
+                Reservation reservation = reservationRepository.findById(reservationId)
+                                .orElseThrow(() -> new IllegalStateException("Réservation non trouvée."));
+
+                if (!reservation.getAdherent().getId().equals(adherentId)) {
+                        throw new SecurityException("Cette réservation ne vous appartient pas.");
+                }
+                if (reservation.getStatut() != StatutReservation.active) {
+                        throw new IllegalStateException("Cette réservation n'est pas active.");
+                }
+                if (reservation.getDateExpiration() == null) {
+                        throw new IllegalStateException("Le livre n'est pas encore disponible pour vous.");
+                }
+                if (reservation.getDateExpiration().isBefore(LocalDate.now())) {
+                        reservation.setStatut(StatutReservation.annulee);
+                        reservation.setNotes("La réservation a expiré le " + reservation.getDateExpiration());
+                        reservationRepository.save(reservation);
+                        reservationService.traiterRetourLivre(reservation.getLivre());
+                        throw new IllegalStateException(
+                                        "La date limite pour récupérer ce livre est dépassée. La réservation a été annulée.");
+                }
+
+                reservation.setStatut(StatutReservation.terminee);
+                reservation.setNotes("Livre emprunté le " + LocalDate.now());
+                reservationRepository.save(reservation);
+
+                Long livreId = reservation.getLivre().getId();
+                emprunterLivre(adherentId, livreId, typePretId);
         }
 }

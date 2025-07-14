@@ -18,10 +18,13 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.bibliotheque.gestion_pret.model.Adherent;
 import com.bibliotheque.gestion_pret.model.Livre;
 import com.bibliotheque.gestion_pret.model.Pret;
+import com.bibliotheque.gestion_pret.model.Reservation;
 import com.bibliotheque.gestion_pret.repository.AdherentRepository;
 import com.bibliotheque.gestion_pret.repository.TypePretRepository;
+import com.bibliotheque.gestion_pret.service.LivreService;
 import com.bibliotheque.gestion_pret.service.PretService;
 import com.bibliotheque.gestion_pret.service.ProlongationService;
+import com.bibliotheque.gestion_pret.service.ReservationService;
 import com.bibliotheque.gestion_pret.service.UserService;
 
 @Controller
@@ -40,12 +43,23 @@ public class UserController {
     @Autowired
     private TypePretRepository typePretRepository;
 
+    @Autowired
+    private LivreService livreService;
+
+    @Autowired
+    private ReservationService reservationService;
+
     @GetMapping("/dashboard/{id}")
     public String userDashboard(@PathVariable Long id,
             @RequestParam(name = "query", required = false) String query,
             Model model) {
 
         List<Livre> livres = userService.searchLivres(query);
+
+        for (Livre livre : livres) {
+            int disponibles = livreService.calculerNbExemplairesDisponibles(livre);
+            livre.setNbExemplairesDisponibles(disponibles);
+        }
 
         model.addAttribute("livres", livres);
         model.addAttribute("userId", id);
@@ -62,7 +76,6 @@ public class UserController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String userEmail = authentication.getName();
 
-        // On trouve le vrai adhérent connecté
         Adherent adherent = adherentRepository.findByEmail(userEmail)
                 .orElseThrow(() -> new IllegalStateException("Utilisateur non trouvé dans la session"));
 
@@ -73,7 +86,6 @@ public class UserController {
             redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
         }
 
-        // Redirection dynamique vers le bon dashboard
         return "redirect:/user/dashboard/" + adherent.getId();
     }
 
@@ -86,11 +98,10 @@ public class UserController {
 
         List<Pret> prets = userService.getPretsByAdherentId(adherent.getId());
 
-        // On ajoute la liste des prêts et l'ID de l'utilisateur au modèle
         model.addAttribute("prets", prets);
         model.addAttribute("userId", adherent.getId());
 
-        return "user/mes-prets"; // Nom de la nouvelle page HTML
+        return "user/mes-prets";
     }
 
     @PostMapping("/rendre")
@@ -130,5 +141,77 @@ public class UserController {
         }
 
         return "redirect:/user/mes-prets";
+    }
+
+    @PostMapping("/reserver")
+    public String reserverLivre(@RequestParam("livreId") Long livreId, RedirectAttributes redirectAttributes) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Adherent adherent = adherentRepository.findByEmail(authentication.getName())
+                .orElseThrow(() -> new IllegalStateException("Utilisateur non trouvé"));
+
+        try {
+            reservationService.creerReservation(adherent.getId(), livreId);
+            redirectAttributes.addFlashAttribute("successMessage", "Votre réservation a été enregistrée !");
+        } catch (IllegalStateException e) {
+            redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
+        }
+
+        return "redirect:/user/dashboard/" + adherent.getId();
+    }
+
+    @GetMapping("/mes-reservations")
+    public String mesReservations(Model model) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String userEmail = authentication.getName();
+        Adherent adherent = adherentRepository.findByEmail(userEmail)
+                .orElseThrow(() -> new IllegalStateException("Utilisateur non trouvé dans la session"));
+
+        List<Reservation> reservations = reservationService.listerReservationsParAdherent(adherent.getId());
+
+        model.addAttribute("typesDePret", typePretRepository.findAll());
+
+        model.addAttribute("reservations", reservations);
+        model.addAttribute("userId", adherent.getId());
+
+        return "user/mes-reservations";
+    }
+
+    @PostMapping("/reservations/annuler")
+    public String annulerReservation(@RequestParam("reservationId") Long reservationId,
+            RedirectAttributes redirectAttributes) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String userEmail = authentication.getName();
+        Adherent adherent = adherentRepository.findByEmail(userEmail)
+                .orElseThrow(() -> new IllegalStateException("Utilisateur non trouvé"));
+
+        try {
+            reservationService.annulerReservation(reservationId, adherent.getId());
+            redirectAttributes.addFlashAttribute("successMessage", "Votre réservation a bien été annulée.");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Erreur lors de l'annulation : " + e.getMessage());
+        }
+
+        return "redirect:/user/mes-reservations";
+    }
+
+    @PostMapping("/reservations/emprunter")
+    public String emprunterLivreReserve(@RequestParam("reservationId") Long reservationId,
+            @RequestParam("typePretId") Long typePretId,
+            RedirectAttributes redirectAttributes) {
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String userEmail = authentication.getName();
+        Adherent adherent = adherentRepository.findByEmail(userEmail)
+                .orElseThrow(() -> new IllegalStateException("Utilisateur non trouvé"));
+
+        try {
+            pretService.emprunterLivreReserve(reservationId, adherent.getId(), typePretId);
+            redirectAttributes.addFlashAttribute("successMessage",
+                    "Livre emprunté avec succès depuis votre réservation !");
+            return "redirect:/user/mes-prets";
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Erreur lors de l'emprunt : " + e.getMessage());
+            return "redirect:/user/mes-reservations";
+        }
     }
 }
