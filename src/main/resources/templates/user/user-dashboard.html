@@ -357,6 +357,15 @@
             </div>
         </div>
 
+        <div th:if="${aDesPenalites}" class="alert alert-danger d-flex align-items-center" role="alert">
+            <i class="bi bi-exclamation-triangle-fill me-2"></i>
+            <div>
+                <strong>Attention :</strong> Vous avez des pénalités impayées. Tout nouvel emprunt est bloqué.
+                <a th:href="@{/user/mes-penalites}" class="alert-link">Consultez vos pénalités ici</a> pour plus de
+                détails.
+            </div>
+        </div>
+
         <div th:if="${successMessage}" class="alert alert-success d-flex align-items-center" role="alert">
             <i class="bi bi-check-circle-fill me-2"></i>
             <span th:text="${successMessage}"></span>
@@ -365,6 +374,9 @@
             <i class="bi bi-exclamation-triangle-fill me-2"></i>
             <span th:text="${errorMessage}"></span>
         </div>
+        <!-- À placer en haut de la page user-dashboard.html, après le hero-section -->
+
+        
 
         <hr class="divider">
 

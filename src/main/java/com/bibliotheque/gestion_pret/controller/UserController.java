@@ -17,11 +17,13 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.bibliotheque.gestion_pret.model.Adherent;
 import com.bibliotheque.gestion_pret.model.Livre;
+import com.bibliotheque.gestion_pret.model.Penalite;
 import com.bibliotheque.gestion_pret.model.Pret;
 import com.bibliotheque.gestion_pret.model.Reservation;
 import com.bibliotheque.gestion_pret.repository.AdherentRepository;
 import com.bibliotheque.gestion_pret.repository.TypePretRepository;
 import com.bibliotheque.gestion_pret.service.LivreService;
+import com.bibliotheque.gestion_pret.service.PenaliteService;
 import com.bibliotheque.gestion_pret.service.PretService;
 import com.bibliotheque.gestion_pret.service.ProlongationService;
 import com.bibliotheque.gestion_pret.service.ReservationService;
@@ -49,6 +51,9 @@ public class UserController {
     @Autowired
     private ReservationService reservationService;
 
+    @Autowired
+    private PenaliteService penaliteService;
+
     @GetMapping("/dashboard/{id}")
     public String userDashboard(@PathVariable Long id,
             @RequestParam(name = "query", required = false) String query,
@@ -60,6 +65,9 @@ public class UserController {
             int disponibles = livreService.calculerNbExemplairesDisponibles(livre);
             livre.setNbExemplairesDisponibles(disponibles);
         }
+
+        boolean aDesPenalites = penaliteService.aDesPenalitesImpayees(id);
+        model.addAttribute("aDesPenalites", aDesPenalites);
 
         model.addAttribute("livres", livres);
         model.addAttribute("userId", id);
@@ -213,5 +221,20 @@ public class UserController {
             redirectAttributes.addFlashAttribute("errorMessage", "Erreur lors de l'emprunt : " + e.getMessage());
             return "redirect:/user/mes-reservations";
         }
+    }
+
+    @GetMapping("/mes-penalites")
+    public String mesPenalites(Model model) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String userEmail = authentication.getName();
+        Adherent adherent = adherentRepository.findByEmail(userEmail)
+                .orElseThrow(() -> new IllegalStateException("Utilisateur non trouvé dans la session"));
+
+        List<Penalite> penalites = penaliteService.listerPenalitesParAdherent(adherent.getId());
+
+        model.addAttribute("penalites", penalites);
+        model.addAttribute("userId", adherent.getId());
+
+        return "user/mes-penalites";
     }
 }
