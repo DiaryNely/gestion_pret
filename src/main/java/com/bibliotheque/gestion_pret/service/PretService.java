@@ -51,7 +51,6 @@ public class PretService {
         @Transactional
         public void emprunterLivre(Long adherentId, Long livreId, Long typePretId, LocalDate dateEmprunt)
                         throws Exception {
-                // 1. Récupération des entités
                 Livre livre = livreRepository.findById(livreId)
                                 .orElseThrow(() -> new Exception("Livre non trouvé avec l'ID : " + livreId));
                 Adherent adherent = adherentRepository.findById(adherentId)
@@ -94,7 +93,6 @@ public class PretService {
                                         + livre.getRestrictionTypeAdherent().getNom() + ").");
                 }
 
-                // 5. Création et sauvegarde du prêt
                 Pret nouveauPret = new Pret();
                 nouveauPret.setAdherent(adherent);
                 nouveauPret.setLivre(livre);
@@ -182,14 +180,13 @@ public class PretService {
 
                 int joursTolerance = parametreService.getJoursTolerance();
                 if (dateRetourReelle == null || !dateRetourReelle.isAfter(dateRetourPrevue.plusDays(joursTolerance))) {
-                        return; // Pas de retard ou dans la tolérance
+                        return;
                 }
 
                 long joursDeRetard = ChronoUnit.DAYS.between(dateRetourPrevue.plusDays(joursTolerance),
                                 dateRetourReelle);
                 int ratioSuspension = parametreService.getRatioSuspensionParJourRetard();
 
-                // Si le ratio est 0, on ne fait rien
                 if (ratioSuspension <= 0) {
                         return;
                 }
@@ -198,7 +195,6 @@ public class PretService {
 
                 Adherent adherent = pret.getAdherent();
                 LocalDate dateDebutSuspension = LocalDate.now();
-                // Si l'adhérent est déjà suspendu, on cumule
                 if (adherent.getDateFinSuspension() != null
                                 && adherent.getDateFinSuspension().isAfter(dateDebutSuspension)) {
                         dateDebutSuspension = adherent.getDateFinSuspension().plusDays(1);
