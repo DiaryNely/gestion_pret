@@ -1,4 +1,4 @@
-package com.bibliotheque.gestion_pret.config; // Ou le package de votre choix
+package com.bibliotheque.gestion_pret.config;
 
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
