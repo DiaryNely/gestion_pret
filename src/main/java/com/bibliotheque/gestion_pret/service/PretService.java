@@ -1,6 +1,8 @@
 package com.bibliotheque.gestion_pret.service;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -43,6 +45,11 @@ public class PretService {
         @Autowired
         private PenaliteService penaliteService;
 
+        @Autowired
+        private ParametreService parametreService;
+        @Autowired
+        private LivreService livreService;
+
         @Transactional
         public void emprunterLivre(Long adherentId, Long livreId, Long typePretId, LocalDate dateEmprunt)
                         throws Exception {
@@ -54,6 +61,14 @@ public class PretService {
 
                 if (adherent.getAbonnementFin() == null || adherent.getAbonnementFin().isBefore(dateEmprunt)) {
                         throw new Exception("Votre abonnement n'était pas actif à la date d'emprunt sélectionnée.");
+                }
+
+                if (adherent.getDateFinSuspension() != null
+                                && adherent.getDateFinSuspension().isAfter(LocalDate.now())) {
+                        throw new Exception("Emprunt impossible : vous êtes suspendu de prêt jusqu'au "
+                                        + adherent.getDateFinSuspension()
+                                                        .format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))
+                                        + ".");
                 }
 
                 if (adherent.getStatutPaiement() != StatutPaiementAdherent.paye) {
@@ -127,6 +142,8 @@ public class PretService {
                 reservationService.traiterRetourLivre(livreRetourne);
 
                 penaliteService.creerPenaliteSiNecessaire(pret);
+                calculerEtAppliquerSuspension(pret);
+
         }
 
         @Transactional
@@ -159,5 +176,38 @@ public class PretService {
 
                 Long livreId = reservation.getLivre().getId();
                 emprunterLivre(adherentId, livreId, typePretId, dateEmprunt);
+        }
+
+        private void calculerEtAppliquerSuspension(Pret pret) {
+                LocalDate dateRetourPrevue = pret.getDateRetourPrevue();
+                LocalDate dateRetourReelle = pret.getDateRetourReelle();
+
+                int joursTolerance = parametreService.getJoursTolerance();
+                if (dateRetourReelle == null || !dateRetourReelle.isAfter(dateRetourPrevue.plusDays(joursTolerance))) {
+                        return; // Pas de retard ou dans la tolérance
+                }
+
+                long joursDeRetard = ChronoUnit.DAYS.between(dateRetourPrevue.plusDays(joursTolerance),
+                                dateRetourReelle);
+                int ratioSuspension = parametreService.getRatioSuspensionParJourRetard();
+
+                // Si le ratio est 0, on ne fait rien
+                if (ratioSuspension <= 0) {
+                        return;
+                }
+
+                long joursDeSuspension = joursDeRetard * ratioSuspension;
+
+                Adherent adherent = pret.getAdherent();
+                LocalDate dateDebutSuspension = LocalDate.now();
+                // Si l'adhérent est déjà suspendu, on cumule
+                if (adherent.getDateFinSuspension() != null
+                                && adherent.getDateFinSuspension().isAfter(dateDebutSuspension)) {
+                        dateDebutSuspension = adherent.getDateFinSuspension().plusDays(1);
+                }
+
+                LocalDate nouvelleDateFinSuspension = dateDebutSuspension.plusDays(joursDeSuspension);
+                adherent.setDateFinSuspension(nouvelleDateFinSuspension);
+                adherentRepository.save(adherent);
         }
 }

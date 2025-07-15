@@ -18,6 +18,7 @@ import com.bibliotheque.gestion_pret.model.Adherent;
 import com.bibliotheque.gestion_pret.model.Penalite;
 import com.bibliotheque.gestion_pret.model.Pret;
 import com.bibliotheque.gestion_pret.repository.AdherentRepository;
+import com.bibliotheque.gestion_pret.service.AdherentService;
 import com.bibliotheque.gestion_pret.service.AdminService;
 import com.bibliotheque.gestion_pret.service.PenaliteService;
 
@@ -33,6 +34,9 @@ public class AdminController {
 
     @Autowired
     private PenaliteService penaliteService;
+
+    @Autowired
+    private AdherentService adherentService;
 
     @GetMapping("/dashboard")
     public String adminDashboard(Model model) {
@@ -95,5 +99,24 @@ public class AdminController {
         }
 
         return "redirect:/admin/penalites";
+    }
+
+    @GetMapping("/adherents")
+    public String gestionAdherents(Model model) {
+        model.addAttribute("adherents", adherentRepository.findAll());
+        return "admin/gestion-adherents";
+    }
+
+    @PostMapping("/adherents/lever-suspension")
+    public String leverSuspensionAdherent(@RequestParam("adherentId") Long adherentId,
+            RedirectAttributes redirectAttributes) {
+        try {
+            adherentService.leverSuspension(adherentId);
+            redirectAttributes.addFlashAttribute("successMessage",
+                    "La suspension de l'adhérent a été levée avec succès.");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Erreur : " + e.getMessage());
+        }
+        return "redirect:/admin/adherents";
     }
 }

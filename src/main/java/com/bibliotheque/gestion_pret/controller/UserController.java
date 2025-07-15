@@ -60,6 +60,11 @@ public class UserController {
             @RequestParam(name = "query", required = false) String query,
             Model model) {
 
+        Adherent adherent = adherentRepository.findById(id)
+                .orElseThrow(() -> new IllegalStateException("Adhérent non trouvé"));
+
+        model.addAttribute("adherent", adherent);
+
         List<Livre> livres = userService.searchLivres(query);
 
         for (Livre livre : livres) {

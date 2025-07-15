@@ -357,6 +357,16 @@
             </div>
         </div>
 
+        <div th:if="${adherent.dateFinSuspension != null and adherent.dateFinSuspension.isAfter(T(java.time.LocalDate).now())}"
+            class="alert alert-warning d-flex align-items-center" role="alert">
+            <i class="bi bi-stopwatch-fill me-2 fs-4"></i>
+            <div>
+                <strong>Vous êtes suspendu de prêt !</strong> Tout nouvel emprunt est bloqué jusqu'au
+                <strong th:text="${#temporals.format(adherent.dateFinSuspension, 'dd/MM/yyyy')}"></strong> en raison
+                d'un retour tardif.
+            </div>
+        </div>
+
         <div th:if="${aDesPenalites}" class="alert alert-danger d-flex align-items-center" role="alert">
             <i class="bi bi-exclamation-triangle-fill me-2"></i>
             <div>

@@ -49,11 +49,11 @@ public class ParametreService {
         return getValeurAsInteger("ratio_suspension_jour", 2);
     }
 
-    public String getValeur(String nom, String valeurParDefaut) {
+    private String getValeur(String nom, String valeurParDefaut) {
         return cacheParametres.getOrDefault(nom, valeurParDefaut);
     }
 
-    public Integer getValeurAsInteger(String nom, Integer valeurParDefaut) {
+    private Integer getValeurAsInteger(String nom, Integer valeurParDefaut) {
         try {
             return Integer.valueOf(getValeur(nom, valeurParDefaut.toString()));
         } catch (NumberFormatException e) {
