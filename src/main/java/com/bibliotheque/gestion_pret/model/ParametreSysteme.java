@@ -4,7 +4,7 @@ import java.time.LocalDateTime;
 
 import com.bibliotheque.gestion_pret.enums.TypeValeurParametre;
 
-import jakarta.persistence.Column; // Constructeur sans arguments utile
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -16,7 +16,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@NoArgsConstructor // Lombok va générer un constructeur vide pour nous
+@NoArgsConstructor
 @Entity
 @Table(name = "parametres_systeme")
 public class ParametreSysteme {
@@ -43,7 +43,6 @@ public class ParametreSysteme {
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
 
-    // Constructeur pratique pour les valeurs par défaut
     public ParametreSysteme(String nom, String valeur) {
         this.nom = nom;
         this.valeur = valeur;

@@ -69,6 +69,9 @@ public class Adherent {
 
     private Boolean actif;
 
+    @Column(name = "date_fin_suspension")
+    private LocalDate dateFinSuspension;
+
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
 }

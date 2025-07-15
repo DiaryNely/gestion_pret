@@ -194,6 +194,9 @@
                             th:href="@{/user/dashboard/{id}(id=${userId})}">Catalogue</a></li>
                     <li class="nav-item"><a class="nav-link" th:href="@{/user/mes-prets}">Mes Prêts</a></li>
                     <li class="nav-item"><a class="nav-link active" href="#">Mes Réservations</a></li>
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/user/mes-penalites}">Consultez vos pénalités ici</a>
+                    </li>
                 </ul>
                 <form th:action="@{/logout}" method="post">
                     <button type="submit" class="btn btn-outline-primary">

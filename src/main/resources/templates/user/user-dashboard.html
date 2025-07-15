@@ -339,6 +339,9 @@
                     <li class="nav-item">
                         <a class="nav-link" th:href="@{/user/mes-reservations}">Mes Réservations</a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/user/mes-penalites}" >Consultez vos pénalités ici</a>
+                    </li>
                 </ul>
                 <form th:action="@{/logout}" method="post">
                     <button type="submit" class="btn btn-outline-primary">
@@ -354,6 +357,16 @@
             <div class="p-4 p-md-5">
                 <h1 class="display-5">Bienvenue, Adhérent !</h1>
                 <p class="lead">Parcourez notre catalogue et trouvez votre prochaine lecture.</p>
+            </div>
+        </div>
+
+        <div th:if="${adherent.dateFinSuspension != null and adherent.dateFinSuspension.isAfter(T(java.time.LocalDate).now())}"
+            class="alert alert-warning d-flex align-items-center" role="alert">
+            <i class="bi bi-stopwatch-fill me-2 fs-4"></i>
+            <div>
+                <strong>Vous êtes suspendu de prêt !</strong> Tout nouvel emprunt est bloqué jusqu'au
+                <strong th:text="${#temporals.format(adherent.dateFinSuspension, 'dd/MM/yyyy')}"></strong> en raison
+                d'un retour tardif.
             </div>
         </div>
 
