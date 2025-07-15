@@ -46,20 +46,18 @@ public class PretService {
         @Transactional
         public void emprunterLivre(Long adherentId, Long livreId, Long typePretId, LocalDate dateEmprunt)
                         throws Exception {
+                // 1. Récupération des entités
                 Livre livre = livreRepository.findById(livreId)
                                 .orElseThrow(() -> new Exception("Livre non trouvé avec l'ID : " + livreId));
                 Adherent adherent = adherentRepository.findById(adherentId)
                                 .orElseThrow(() -> new Exception("Adhérent non trouvé avec l'ID : " + adherentId));
 
-                // Validation de la date d'emprunt
-                if (dateEmprunt.isBefore(LocalDate.now())) {
-                        throw new Exception("La date d'emprunt ne peut pas être antérieure à aujourd'hui");
+                if (adherent.getAbonnementFin() == null || adherent.getAbonnementFin().isBefore(dateEmprunt)) {
+                        throw new Exception("Votre abonnement n'était pas actif à la date d'emprunt sélectionnée.");
                 }
 
-                if (adherent.getAbonnementFin() == null || adherent.getAbonnementFin().isBefore(dateEmprunt)
-                                || adherent.getStatutPaiement() != StatutPaiementAdherent.paye) {
-                        throw new Exception(
-                                        "Votre abonnement ne sera pas actif à la date d'emprunt choisie ou votre paiement n'est pas à jour.");
+                if (adherent.getStatutPaiement() != StatutPaiementAdherent.paye) {
+                        throw new Exception("Votre paiement d'abonnement n'est pas à jour.");
                 }
 
                 if (penaliteService.aDesPenalitesImpayees(adherentId)) {
@@ -72,24 +70,21 @@ public class PretService {
                 }
 
                 long pretsEnCours = pretRepository.countByAdherent_IdAndStatutPret_Nom(adherentId, "En cours");
-
                 if (pretsEnCours >= adherent.getTypeAdherent().getMaxLivresEmprunt()) {
                         throw new Exception("Vous avez atteint votre limite de "
-                                        + adherent.getTypeAdherent().getMaxLivresEmprunt()
-                                        + " prêts simultanés.");
+                                        + adherent.getTypeAdherent().getMaxLivresEmprunt() + " prêts simultanés.");
                 }
 
-                if (livre.getRestrictionTypeAdherent() != null
-                                && !livre.getRestrictionTypeAdherent().getId()
-                                                .equals(adherent.getTypeAdherent().getId())) {
+                if (livre.getRestrictionTypeAdherent() != null && !livre.getRestrictionTypeAdherent().getId()
+                                .equals(adherent.getTypeAdherent().getId())) {
                         throw new Exception("Ce livre est réservé à une autre catégorie d'adhérents ("
                                         + livre.getRestrictionTypeAdherent().getNom() + ").");
                 }
 
+                // 5. Création et sauvegarde du prêt
                 Pret nouveauPret = new Pret();
                 nouveauPret.setAdherent(adherent);
                 nouveauPret.setLivre(livre);
-
                 nouveauPret.setDateEmprunt(dateEmprunt);
 
                 int dureePret = adherent.getTypeAdherent().getDureePretJours();
@@ -99,13 +94,11 @@ public class PretService {
                                 .orElseThrow(() -> new Exception("Statut de prêt 'En cours' non trouvé."));
                 TypePret typeChoisi = typePretRepository.findById(typePretId)
                                 .orElseThrow(() -> new Exception("Type de prêt invalide sélectionné."));
+
                 nouveauPret.setStatutPret(statutEnCours);
                 nouveauPret.setTypePret(typeChoisi);
 
                 pretRepository.save(nouveauPret);
-
-                // livre.setNombreExemplaires(livre.getNombreExemplaires() - 1);
-                // livreRepository.save(livre);
         }
 
         @Transactional

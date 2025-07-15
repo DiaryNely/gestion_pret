@@ -466,11 +466,16 @@
                         <h5 class="modal-title" id="emprunterLivreModalLabel">Emprunter un livre</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
+
                     <div class="modal-body">
                         <p>Vous êtes sur le point d'emprunter : <strong id="livreTitreEmprunterModal">Titre du
                                 livre</strong>.</p>
-
                         <input type="hidden" name="livreId" id="livreIdEmprunterModal" value="">
+
+                        <div class="mb-3">
+                            <label for="dateEmprunt" class="form-label fw-bold">Date de début de l'emprunt :</label>
+                            <input type="date" class="form-control" id="dateEmprunt" name="dateEmprunt" required>
+                        </div>
 
                         <div class="mb-3">
                             <label for="typePretId" class="form-label fw-bold">Choisissez le type de prêt :</label>
@@ -480,13 +485,8 @@
                                 </option>
                             </select>
                         </div>
-
-                        <div class="mb-3">
-                            <label for="dateEmprunt" class="form-label fw-bold">Date d'emprunt :</label>
-                            <input type="date" class="form-control" id="dateEmprunt" name="union" required
-                                th:field="*{dateEmprunt}">
-                        </div>
                     </div>
+
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
                         <button type="submit" class="btn btn-primary">Confirmer l'emprunt</button>
@@ -514,6 +514,7 @@
                     const button = event.relatedTarget;
                     const livreId = button.getAttribute('data-livre-id');
                     const livreTitre = button.getAttribute('data-livre-titre');
+                    emprunterModal.querySelector('#dateEmprunt').valueAsDate = new Date();
 
                     emprunterModal.querySelector('#livreTitreEmprunterModal').textContent = livreTitre;
                     emprunterModal.querySelector('#livreIdEmprunterModal').value = livreId;

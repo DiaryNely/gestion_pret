@@ -296,8 +296,7 @@
     </div>
 
     <!-- Modal pour Emprunter un livre réservé -->
-    <div class="modal fade" id="emprunterReserveModal" tabindex="-1" aria-labelledby="emprunterReserveModalLabel"
-        aria-hidden="true">
+    <div class="modal fade" id="emprunterReserveModal" ...>
         <div class="modal-dialog">
             <div class="modal-content">
                 <form th:action="@{/user/reservations/emprunter}" method="post">
@@ -310,18 +309,19 @@
                         </p>
                         <input type="hidden" name="reservationId" id="reservationIdModal" value="">
                         <div class="mb-3">
-                            <label for="typePretId" class="form-label fw-bold">Veuillez choisir le type de prêt
+                            <label for="dateEmpruntReserve" class="form-label fw-bold">Date de début de l'emprunt
+                                :</label>
+                            <input type="date" class="form-control" id="dateEmpruntReserve" name="dateEmprunt" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="typePretIdReserve" class="form-label fw-bold">Veuillez choisir le type de prêt
                                 :</label>
                             <p class="form-text mt-0">La durée du prêt est définie par votre type d'abonnement.</p>
-                            <select name="typePretId" id="typePretId" class="form-select" required>
+                            <select name="typePretId" id="typePretIdReserve" class="form-select" required>
                                 <option th:each="type : ${typesDePret}" th:value="${type.id}" th:text="${type.nom}">
                                 </option>
                             </select>
-                        </div>
-                        <div class="mb-3">
-                            <label for="dateEmprunt" class="form-label fw-bold">Date d'emprunt :</label>
-                            <input type="date" class="form-control" id="dateEmprunt" name="dateEmprunt" required
-                                th:field="*{dateEmprunt}">
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -332,7 +332,6 @@
             </div>
         </div>
     </div>
-
     <footer>
         <div class="container">
             <p class="text-center">© 2025 Gestion Prêt Bibliothèque</p>
@@ -354,6 +353,7 @@
 
                         const modalTitre = modalElement.querySelector('#livreTitreModalReserve');
                         const modalInputId = modalElement.querySelector('#reservationIdModal');
+                        modalElement.querySelector('#dateEmpruntReserve').valueAsDate = new Date();
 
                         modalTitre.textContent = livreTitre;
                         modalInputId.value = reservationId;

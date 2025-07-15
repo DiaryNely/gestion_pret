@@ -84,9 +84,9 @@ public class UserController {
             @RequestParam("typePretId") Long typePretId,
             @RequestParam("dateEmprunt") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate dateEmprunt,
             RedirectAttributes redirectAttributes) {
+
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String userEmail = authentication.getName();
-
         Adherent adherent = adherentRepository.findByEmail(userEmail)
                 .orElseThrow(() -> new IllegalStateException("Utilisateur non trouvé dans la session"));
 
