@@ -47,8 +47,6 @@ public class PretService {
 
         @Autowired
         private ParametreService parametreService;
-        @Autowired
-        private LivreService livreService;
 
         @Transactional
         public void emprunterLivre(Long adherentId, Long livreId, Long typePretId, LocalDate dateEmprunt)

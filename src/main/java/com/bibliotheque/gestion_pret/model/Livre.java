@@ -2,7 +2,11 @@ package com.bibliotheque.gestion_pret.model;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -11,6 +15,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.persistence.Transient;
 import lombok.Data;
@@ -71,6 +76,10 @@ public class Livre {
     @Transient
     private int nbExemplairesDisponibles;
 
+    @OneToMany(mappedBy = "livre", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonManagedReference
+    private List<Exemplaire> exemplaires;
+
     public int getNbExemplairesDisponibles() {
         return this.nbExemplairesDisponibles;
     }
@@ -78,4 +87,5 @@ public class Livre {
     public void setNbExemplairesDisponibles(int nbExemplairesDisponibles) {
         this.nbExemplairesDisponibles = nbExemplairesDisponibles;
     }
+
 }
