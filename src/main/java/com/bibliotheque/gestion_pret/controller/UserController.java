@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -79,16 +80,18 @@ public class UserController {
     }
 
     @PostMapping("/emprunter")
-    public String emprunterLivre(@RequestParam("livreId") Long livreId, @RequestParam("typePretId") Long typePretId,
+    public String emprunterLivre(@RequestParam("livreId") Long livreId,
+            @RequestParam("typePretId") Long typePretId,
+            @RequestParam("dateEmprunt") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate dateEmprunt,
             RedirectAttributes redirectAttributes) {
+
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String userEmail = authentication.getName();
-
         Adherent adherent = adherentRepository.findByEmail(userEmail)
                 .orElseThrow(() -> new IllegalStateException("Utilisateur non trouvé dans la session"));
 
         try {
-            pretService.emprunterLivre(adherent.getId(), livreId, typePretId);
+            pretService.emprunterLivre(adherent.getId(), livreId, typePretId, dateEmprunt);
             redirectAttributes.addFlashAttribute("successMessage", "Livre emprunté avec succès !");
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
@@ -205,6 +208,7 @@ public class UserController {
     @PostMapping("/reservations/emprunter")
     public String emprunterLivreReserve(@RequestParam("reservationId") Long reservationId,
             @RequestParam("typePretId") Long typePretId,
+            @RequestParam("dateEmprunt") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate dateEmprunt,
             RedirectAttributes redirectAttributes) {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -213,7 +217,7 @@ public class UserController {
                 .orElseThrow(() -> new IllegalStateException("Utilisateur non trouvé"));
 
         try {
-            pretService.emprunterLivreReserve(reservationId, adherent.getId(), typePretId);
+            pretService.emprunterLivreReserve(reservationId, adherent.getId(), typePretId, dateEmprunt);
             redirectAttributes.addFlashAttribute("successMessage",
                     "Livre emprunté avec succès depuis votre réservation !");
             return "redirect:/user/mes-prets";

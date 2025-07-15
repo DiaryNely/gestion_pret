@@ -8,7 +8,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    
+
     <!-- CSS Copié depuis votre user-dashboard.html -->
     <style>
         :root {
@@ -26,31 +26,160 @@
             --card-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
             --card-hover-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
         }
-        * { font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; }
-        body { background-color: var(--light-gray); color: var(--text-dark); line-height: 1.6; }
-        .navbar { background-color: white !important; box-shadow: 0 1px 3px rgba(0,0,0,0.1); padding: 1rem 0; }
-        .navbar-brand { font-weight: 700; font-size: 1.5rem; color: var(--primary-blue) !important; }
-        .navbar-brand i { color: var(--primary-blue-light); margin-right: 0.5rem; }
-        .nav-link { color: var(--text-dark) !important; font-weight: 500; padding: 0.5rem 1rem !important; transition: color 0.2s ease; }
-        .nav-link:hover { color: var(--primary-blue) !important; }
-        .nav-link.active { color: var(--primary-blue) !important; background-color: rgba(30, 64, 175, 0.1); border-radius: 0.375rem; }
-        .btn-outline-primary { border-color: var(--primary-blue); color: var(--primary-blue); transition: all 0.2s ease; }
-        .btn-outline-primary:hover { background-color: var(--primary-blue); border-color: var(--primary-blue); }
-        .hero-section { background: white; border-radius: 12px; box-shadow: var(--card-shadow); margin-bottom: 2rem; border: 1px solid var(--border-color); }
-        .hero-section h1 { color: var(--text-dark); font-weight: 700; margin-bottom: 1rem; }
-        .hero-section p { color: var(--text-muted); font-size: 1.1rem; margin-bottom: 0; }
-        .alert { border: none; border-radius: 8px; border-left: 4px solid; font-weight: 500; }
-        .alert-success { background-color: #ecfdf5; color: #065f46; border-left-color: var(--success-green); }
-        .alert-danger { background-color: #fef2f2; color: #991b1b; border-left-color: var(--danger-red); }
-        .main-card { background: white; border-radius: 12px; box-shadow: var(--card-shadow); border: 1px solid var(--border-color); }
-        .table thead th { background-color: #f8fafc; border-bottom: 2px solid var(--border-color); color: var(--text-dark); font-weight: 600; font-size: 0.875rem; text-transform: uppercase; letter-spacing: 0.025em; padding: 1rem; }
-        .table tbody td { padding: 1rem; vertical-align: middle; border-bottom: 1px solid var(--border-color); color: var(--text-dark); }
-        .badge { border-radius: 20px; padding: 0.5em 0.875em; font-weight: 500; font-size: 0.75rem; text-transform: uppercase; }
-        .bg-info { background-color: #0ea5e9 !important; }
-        .bg-success { background-color: var(--success-green) !important; }
-        .btn-sm { padding: 0.375rem 0.75rem; font-size: 0.875rem; border-radius: 6px; font-weight: 500; }
-        footer { background-color: white; border-top: 1px solid var(--border-color); margin-top: 3rem; padding: 2rem 0; }
-        footer p { color: var(--text-muted); margin-bottom: 0; }
+
+        * {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+
+        body {
+            background-color: var(--light-gray);
+            color: var(--text-dark);
+            line-height: 1.6;
+        }
+
+        .navbar {
+            background-color: white !important;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            padding: 1rem 0;
+        }
+
+        .navbar-brand {
+            font-weight: 700;
+            font-size: 1.5rem;
+            color: var(--primary-blue) !important;
+        }
+
+        .navbar-brand i {
+            color: var(--primary-blue-light);
+            margin-right: 0.5rem;
+        }
+
+        .nav-link {
+            color: var(--text-dark) !important;
+            font-weight: 500;
+            padding: 0.5rem 1rem !important;
+            transition: color 0.2s ease;
+        }
+
+        .nav-link:hover {
+            color: var(--primary-blue) !important;
+        }
+
+        .nav-link.active {
+            color: var(--primary-blue) !important;
+            background-color: rgba(30, 64, 175, 0.1);
+            border-radius: 0.375rem;
+        }
+
+        .btn-outline-primary {
+            border-color: var(--primary-blue);
+            color: var(--primary-blue);
+            transition: all 0.2s ease;
+        }
+
+        .btn-outline-primary:hover {
+            background-color: var(--primary-blue);
+            border-color: var(--primary-blue);
+        }
+
+        .hero-section {
+            background: white;
+            border-radius: 12px;
+            box-shadow: var(--card-shadow);
+            margin-bottom: 2rem;
+            border: 1px solid var(--border-color);
+        }
+
+        .hero-section h1 {
+            color: var(--text-dark);
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .hero-section p {
+            color: var(--text-muted);
+            font-size: 1.1rem;
+            margin-bottom: 0;
+        }
+
+        .alert {
+            border: none;
+            border-radius: 8px;
+            border-left: 4px solid;
+            font-weight: 500;
+        }
+
+        .alert-success {
+            background-color: #ecfdf5;
+            color: #065f46;
+            border-left-color: var(--success-green);
+        }
+
+        .alert-danger {
+            background-color: #fef2f2;
+            color: #991b1b;
+            border-left-color: var(--danger-red);
+        }
+
+        .main-card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: var(--card-shadow);
+            border: 1px solid var(--border-color);
+        }
+
+        .table thead th {
+            background-color: #f8fafc;
+            border-bottom: 2px solid var(--border-color);
+            color: var(--text-dark);
+            font-weight: 600;
+            font-size: 0.875rem;
+            text-transform: uppercase;
+            letter-spacing: 0.025em;
+            padding: 1rem;
+        }
+
+        .table tbody td {
+            padding: 1rem;
+            vertical-align: middle;
+            border-bottom: 1px solid var(--border-color);
+            color: var(--text-dark);
+        }
+
+        .badge {
+            border-radius: 20px;
+            padding: 0.5em 0.875em;
+            font-weight: 500;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+        }
+
+        .bg-info {
+            background-color: #0ea5e9 !important;
+        }
+
+        .bg-success {
+            background-color: var(--success-green) !important;
+        }
+
+        .btn-sm {
+            padding: 0.375rem 0.75rem;
+            font-size: 0.875rem;
+            border-radius: 6px;
+            font-weight: 500;
+        }
+
+        footer {
+            background-color: white;
+            border-top: 1px solid var(--border-color);
+            margin-top: 3rem;
+            padding: 2rem 0;
+        }
+
+        footer p {
+            color: var(--text-muted);
+            margin-bottom: 0;
+        }
     </style>
 </head>
 
@@ -61,7 +190,8 @@
             <a class="navbar-brand" href="#"><i class="bi bi-book-half"></i> Boky</a>
             <div class="collapse navbar-collapse">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                    <li class="nav-item"><a class="nav-link" th:href="@{/user/dashboard/{id}(id=${userId})}">Catalogue</a></li>
+                    <li class="nav-item"><a class="nav-link"
+                            th:href="@{/user/dashboard/{id}(id=${userId})}">Catalogue</a></li>
                     <li class="nav-item"><a class="nav-link" th:href="@{/user/mes-prets}">Mes Prêts</a></li>
                     <li class="nav-item"><a class="nav-link active" href="#">Mes Réservations</a></li>
                 </ul>
@@ -110,19 +240,27 @@
                                 <td th:text="${#temporals.format(resa.dateReservation, 'dd/MM/yyyy')}"></td>
                                 <td>
                                     <span th:switch="${resa.statut.name()}">
-                                        <span th:case="'active'" class="badge" th:classappend="${resa.dateExpiration != null ? 'bg-success' : 'bg-primary'}">
-                                            <span th:if="${resa.dateExpiration != null}"><i class="bi bi-check-circle me-1"></i>Disponible</span>
-                                            <span th:if="${resa.dateExpiration == null}"><i class="bi bi-hourglass-split me-1"></i>En attente</span>
+                                        <span th:case="'active'" class="badge"
+                                            th:classappend="${resa.dateExpiration != null ? 'bg-success' : 'bg-primary'}">
+                                            <span th:if="${resa.dateExpiration != null}"><i
+                                                    class="bi bi-check-circle me-1"></i>Disponible</span>
+                                            <span th:if="${resa.dateExpiration == null}"><i
+                                                    class="bi bi-hourglass-split me-1"></i>En attente</span>
                                         </span>
-                                        <span th:case="'terminee'" class="badge bg-secondary"><i class="bi bi-check2-all me-1"></i>Terminée</span>
-                                        <span th:case="'annulee'" class="badge bg-warning text-dark"><i class="bi bi-x-circle me-1"></i>Annulée</span>
+                                        <span th:case="'terminee'" class="badge bg-secondary"><i
+                                                class="bi bi-check2-all me-1"></i>Terminée</span>
+                                        <span th:case="'annulee'" class="badge bg-warning text-dark"><i
+                                                class="bi bi-x-circle me-1"></i>Annulée</span>
                                     </span>
                                 </td>
                                 <td>
-                                    <span th:if="${resa.statut.name() == 'active' and resa.dateExpiration != null}" class="text-success fw-bold">
-                                        À récupérer avant le <span th:text="${#temporals.format(resa.dateExpiration, 'dd/MM/yyyy')}"></span>
+                                    <span th:if="${resa.statut.name() == 'active' and resa.dateExpiration != null}"
+                                        class="text-success fw-bold">
+                                        À récupérer avant le <span
+                                            th:text="${#temporals.format(resa.dateExpiration, 'dd/MM/yyyy')}"></span>
                                     </span>
-                                    <span th:if="${resa.statut.name() == 'active' and resa.dateExpiration == null}" class="text-muted">
+                                    <span th:if="${resa.statut.name() == 'active' and resa.dateExpiration == null}"
+                                        class="text-muted">
                                         Vous êtes en file d'attente.
                                     </span>
                                     <span th:if="${resa.statut.name() == 'terminee'}" class="text-muted">
@@ -136,16 +274,19 @@
                                             <i class="bi bi-bag-check"></i> Emprunter
                                         </button>
                                     </div>
-                                    <form th:if="${resa.statut.name() == 'active' and resa.dateExpiration == null}" th:action="@{/user/reservations/annuler}" method="post">
+                                    <form th:if="${resa.statut.name() == 'active' and resa.dateExpiration == null}"
+                                        th:action="@{/user/reservations/annuler}" method="post">
                                         <input type="hidden" name="reservationId" th:value="${resa.id}" />
-                                        <button type="submit" class="btn btn-sm btn-danger" title="Annuler ma réservation">
+                                        <button type="submit" class="btn btn-sm btn-danger"
+                                            title="Annuler ma réservation">
                                             <i class="bi bi-x-circle"></i> Annuler
                                         </button>
                                     </form>
                                 </td>
                             </tr>
                             <tr th:if="${#lists.isEmpty(reservations)}">
-                                <td colspan="5" class="text-center p-4 text-muted">Vous n'avez aucune réservation pour le moment.</td>
+                                <td colspan="5" class="text-center p-4 text-muted">Vous n'avez aucune réservation pour
+                                    le moment.</td>
                             </tr>
                         </tbody>
                     </table>
@@ -155,7 +296,7 @@
     </div>
 
     <!-- Modal pour Emprunter un livre réservé -->
-    <div class="modal fade" id="emprunterReserveModal" tabindex="-1" aria-labelledby="emprunterReserveModalLabel" aria-hidden="true">
+    <div class="modal fade" id="emprunterReserveModal" ...>
         <div class="modal-dialog">
             <div class="modal-content">
                 <form th:action="@{/user/reservations/emprunter}" method="post">
@@ -164,13 +305,22 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        <p>Vous êtes sur le point d'emprunter le livre : <strong id="livreTitreModalReserve"></strong>.</p>
+                        <p>Vous êtes sur le point d'emprunter le livre : <strong id="livreTitreModalReserve"></strong>.
+                        </p>
                         <input type="hidden" name="reservationId" id="reservationIdModal" value="">
                         <div class="mb-3">
-                            <label for="typePretId" class="form-label fw-bold">Veuillez choisir le type de prêt :</label>
+                            <label for="dateEmpruntReserve" class="form-label fw-bold">Date de début de l'emprunt
+                                :</label>
+                            <input type="date" class="form-control" id="dateEmpruntReserve" name="dateEmprunt" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="typePretIdReserve" class="form-label fw-bold">Veuillez choisir le type de prêt
+                                :</label>
                             <p class="form-text mt-0">La durée du prêt est définie par votre type d'abonnement.</p>
-                            <select name="typePretId" id="typePretId" class="form-select" required>
-                                <option th:each="type : ${typesDePret}" th:value="${type.id}" th:text="${type.nom}"></option>
+                            <select name="typePretId" id="typePretIdReserve" class="form-select" required>
+                                <option th:each="type : ${typesDePret}" th:value="${type.id}" th:text="${type.nom}">
+                                </option>
                             </select>
                         </div>
                     </div>
@@ -182,7 +332,6 @@
             </div>
         </div>
     </div>
-
     <footer>
         <div class="container">
             <p class="text-center">© 2025 Gestion Prêt Bibliothèque</p>
@@ -204,10 +353,11 @@
 
                         const modalTitre = modalElement.querySelector('#livreTitreModalReserve');
                         const modalInputId = modalElement.querySelector('#reservationIdModal');
+                        modalElement.querySelector('#dateEmpruntReserve').valueAsDate = new Date();
 
                         modalTitre.textContent = livreTitre;
                         modalInputId.value = reservationId;
-                        
+
                         emprunterModal.show();
                     });
                 });
@@ -216,4 +366,5 @@
     </script>
 
 </body>
+
 </html>

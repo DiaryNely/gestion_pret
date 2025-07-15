@@ -44,15 +44,20 @@ public class PretService {
         private PenaliteService penaliteService;
 
         @Transactional
-        public void emprunterLivre(Long adherentId, Long livreId, Long typePretId) throws Exception {
+        public void emprunterLivre(Long adherentId, Long livreId, Long typePretId, LocalDate dateEmprunt)
+                        throws Exception {
+                // 1. Récupération des entités
                 Livre livre = livreRepository.findById(livreId)
                                 .orElseThrow(() -> new Exception("Livre non trouvé avec l'ID : " + livreId));
                 Adherent adherent = adherentRepository.findById(adherentId)
                                 .orElseThrow(() -> new Exception("Adhérent non trouvé avec l'ID : " + adherentId));
 
-                if (adherent.getAbonnementFin() == null || adherent.getAbonnementFin().isBefore(LocalDate.now())
-                                || adherent.getStatutPaiement() != StatutPaiementAdherent.paye) {
-                        throw new Exception("Votre abonnement n'est pas actif ou votre paiement n'est pas à jour.");
+                if (adherent.getAbonnementFin() == null || adherent.getAbonnementFin().isBefore(dateEmprunt)) {
+                        throw new Exception("Votre abonnement n'était pas actif à la date d'emprunt sélectionnée.");
+                }
+
+                if (adherent.getStatutPaiement() != StatutPaiementAdherent.paye) {
+                        throw new Exception("Votre paiement d'abonnement n'est pas à jour.");
                 }
 
                 if (penaliteService.aDesPenalitesImpayees(adherentId)) {
@@ -65,39 +70,35 @@ public class PretService {
                 }
 
                 long pretsEnCours = pretRepository.countByAdherent_IdAndStatutPret_Nom(adherentId, "En cours");
-
                 if (pretsEnCours >= adherent.getTypeAdherent().getMaxLivresEmprunt()) {
                         throw new Exception("Vous avez atteint votre limite de "
-                                        + adherent.getTypeAdherent().getMaxLivresEmprunt()
-                                        + " prêts simultanés.");
+                                        + adherent.getTypeAdherent().getMaxLivresEmprunt() + " prêts simultanés.");
                 }
 
-                if (livre.getRestrictionTypeAdherent() != null
-                                && !livre.getRestrictionTypeAdherent().getId()
-                                                .equals(adherent.getTypeAdherent().getId())) {
+                if (livre.getRestrictionTypeAdherent() != null && !livre.getRestrictionTypeAdherent().getId()
+                                .equals(adherent.getTypeAdherent().getId())) {
                         throw new Exception("Ce livre est réservé à une autre catégorie d'adhérents ("
                                         + livre.getRestrictionTypeAdherent().getNom() + ").");
                 }
 
+                // 5. Création et sauvegarde du prêt
                 Pret nouveauPret = new Pret();
                 nouveauPret.setAdherent(adherent);
                 nouveauPret.setLivre(livre);
-                nouveauPret.setDateEmprunt(LocalDate.now());
+                nouveauPret.setDateEmprunt(dateEmprunt);
 
                 int dureePret = adherent.getTypeAdherent().getDureePretJours();
-                nouveauPret.setDateRetourPrevue(LocalDate.now().plusDays(dureePret));
+                nouveauPret.setDateRetourPrevue(dateEmprunt.plusDays(dureePret));
 
                 StatutPret statutEnCours = statutPretRepository.findByNom("En cours")
                                 .orElseThrow(() -> new Exception("Statut de prêt 'En cours' non trouvé."));
                 TypePret typeChoisi = typePretRepository.findById(typePretId)
                                 .orElseThrow(() -> new Exception("Type de prêt invalide sélectionné."));
+
                 nouveauPret.setStatutPret(statutEnCours);
                 nouveauPret.setTypePret(typeChoisi);
 
                 pretRepository.save(nouveauPret);
-
-                // livre.setNombreExemplaires(livre.getNombreExemplaires() - 1);
-                // livreRepository.save(livre);
         }
 
         @Transactional
@@ -129,7 +130,8 @@ public class PretService {
         }
 
         @Transactional
-        public void emprunterLivreReserve(Long reservationId, Long adherentId, Long typePretId) throws Exception {
+        public void emprunterLivreReserve(Long reservationId, Long adherentId, Long typePretId, LocalDate dateEmprunt)
+                        throws Exception {
                 Reservation reservation = reservationRepository.findById(reservationId)
                                 .orElseThrow(() -> new IllegalStateException("Réservation non trouvée."));
 
@@ -142,7 +144,7 @@ public class PretService {
                 if (reservation.getDateExpiration() == null) {
                         throw new IllegalStateException("Le livre n'est pas encore disponible pour vous.");
                 }
-                if (reservation.getDateExpiration().isBefore(LocalDate.now())) {
+                if (reservation.getDateExpiration().isBefore(dateEmprunt)) {
                         reservation.setStatut(StatutReservation.annulee);
                         reservation.setNotes("La réservation a expiré le " + reservation.getDateExpiration());
                         reservationRepository.save(reservation);
@@ -152,10 +154,10 @@ public class PretService {
                 }
 
                 reservation.setStatut(StatutReservation.terminee);
-                reservation.setNotes("Livre emprunté le " + LocalDate.now());
+                reservation.setNotes("Livre emprunté le " + dateEmprunt);
                 reservationRepository.save(reservation);
 
                 Long livreId = reservation.getLivre().getId();
-                emprunterLivre(adherentId, livreId, typePretId);
+                emprunterLivre(adherentId, livreId, typePretId, dateEmprunt);
         }
 }
