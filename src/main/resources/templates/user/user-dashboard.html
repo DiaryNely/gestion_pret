@@ -376,7 +376,7 @@
         </div>
         <!-- À placer en haut de la page user-dashboard.html, après le hero-section -->
 
-        
+
 
         <hr class="divider">
 
@@ -479,6 +479,12 @@
                                 <option th:each="type : ${typesDePret}" th:value="${type.id}" th:text="${type.nom}">
                                 </option>
                             </select>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="dateEmprunt" class="form-label fw-bold">Date d'emprunt :</label>
+                            <input type="date" class="form-control" id="dateEmprunt" name="union" required
+                                th:field="*{dateEmprunt}">
                         </div>
                     </div>
                     <div class="modal-footer">

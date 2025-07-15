@@ -83,31 +83,6 @@ INSERT INTO statuts_prets (nom, description) VALUES
 ('Retourné', 'Livre rendu'),
 ('En retard', 'Prêt dépassé');
 
--- Prêts
-INSERT INTO prets (livre_id, adherent_id, date_emprunt, date_retour_prevue, date_retour_reelle, type_pret_id, statut_pret_id, notes) VALUES
-(1, 1, '2024-12-01', '2024-12-15', '2024-12-14', 1, 2, 'Retour dans les temps'),
-(2, 2, '2024-12-05', '2024-12-26', NULL, 1, 1, 'Prêt en cours'),
-(3, 3, '2024-11-20', '2024-12-20', NULL, 1, 1, 'Prêt enseignant'),
-(4, 1, '2024-11-15', '2024-11-29', '2024-12-03', 1, 2, 'Retour avec léger retard'),
-(5, 3, '2024-10-01', '2024-10-31', NULL, 1, 3, 'Prêt en retard'),
-(6, 4, '2024-12-10', '2024-12-24', NULL, 1, 1, 'Prêt récent'),
-(7, 2, '2024-11-25', '2024-12-16', NULL, 1, 1, 'Prêt professionnel'),
-(8, 5, '2024-11-01', '2024-11-22', '2024-11-20', 1, 2, 'Retour anticipé'),
-(9, 6, '2024-12-08', '2024-12-22', NULL, 2, 1, 'Consultation sur place'),
-(10, 7, '2024-11-10', '2024-11-24', '2024-11-28', 1, 2, 'Retour avec retard');
-
--- Réservations
-INSERT INTO reservations (livre_id, adherent_id, date_reservation, date_expiration, statut, notes) VALUES
-(2, 4, '2024-12-12', '2024-12-19', 'active', 'En attente du retour'),
-(3, 1, '2024-12-10', '2024-12-17', 'active', 'Réservation étudiant'),
-(5, 2, '2024-11-28', '2024-12-05', 'terminee', 'Réservation expirée'),
-(7, 6, '2024-12-11', '2024-12-18', 'active', 'Réservation admin');
-
--- Pénalités
-INSERT INTO penalites (pret_id, adherent_id, montant, jours_retard, date_calcul, statut_paiement, date_paiement, notes) VALUES
-(4, 1, 2.00, 4, '2024-12-03', 'paye', '2024-12-03', 'Pénalité payée immédiatement'),
-(5, 3, 15.00, 30, '2024-12-01', 'impaye', NULL, 'Pénalité importante - livre toujours non rendu'),
-(10, 7, 3.00, 4, '2024-11-28', 'remise', NULL, 'Pénalité annulée - première infraction');
 
 -- Paramètres système
 INSERT INTO parametres_systeme (nom, valeur, type_valeur, description, modifiable) VALUES
@@ -120,13 +95,8 @@ INSERT INTO parametres_systeme (nom, valeur, type_valeur, description, modifiabl
 ('bibliotheque_nom', 'Bibliothèque Municipale', 'string', 'Nom de la bibliothèque', true),
 ('bibliotheque_adresse', '1 Place de la Culture, 75001 Paris', 'string', 'Adresse de la bibliothèque', true),
 ('bibliotheque_telephone', '01.23.45.67.89', 'string', 'Téléphone de la bibliothèque', true),
-('bibliotheque_email', 'contact@bibliotheque.fr', 'string', 'Email de la bibliothèque', true);
+('bibliotheque_email', 'contact@bibliotheque.fr', 'string', 'Email de la bibliothèque', true),
+('ratio_suspension_jour', '2', 'integer', 'Nombre de jours de suspension par jour de retard', true);
 
 
 
-
--- Prolongations
-INSERT INTO prolongations (pret_id, ancienne_date_retour, nouvelle_date_retour, motif, demande_par, approuve_par, date_demande, date_approbation, statut) VALUES
-(2, '2024-12-26', '2025-01-02', 'Besoin de plus de temps pour la lecture', 2, 6, '2024-12-20', '2024-12-20', 'approuvee'),
-(3, '2024-12-20', '2024-12-27', 'Recherche en cours', 3, 6, '2024-12-15', '2024-12-15', 'approuvee'),
-(6, '2024-12-24', '2024-12-31', 'Vacances de Noël', 4, NULL, '2024-12-18', NULL, 'en_attente');
