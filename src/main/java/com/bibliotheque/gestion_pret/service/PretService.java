@@ -48,6 +48,9 @@ public class PretService {
         @Autowired
         private ParametreService parametreService;
 
+        @Autowired
+        private CalendrierService calendrierService;
+
         @Transactional
         public void emprunterLivre(Long adherentId, Long livreId, Long typePretId, LocalDate dateEmprunt)
                         throws Exception {
@@ -58,6 +61,14 @@ public class PretService {
 
                 if (adherent.getAbonnementFin() == null || adherent.getAbonnementFin().isBefore(dateEmprunt)) {
                         throw new Exception("Votre abonnement n'était pas actif à la date d'emprunt sélectionnée.");
+                }
+
+                if (!calendrierService.isJourOuvert(dateEmprunt)) {
+                        LocalDate prochainJour = calendrierService.getProchainJourOuvert(dateEmprunt);
+                        throw new Exception("Emprunt impossible le "
+                                        + dateEmprunt.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))
+                                        + " car la bibliothèque est fermée. Prochain jour d'ouverture : "
+                                        + prochainJour.format(DateTimeFormatter.ofPattern("dd/MM/yyyy")) + ".");
                 }
 
                 if (adherent.getDateFinSuspension() != null
@@ -119,6 +130,14 @@ public class PretService {
 
                 if (pret.getDateRetourReelle() != null) {
                         throw new Exception("Ce livre a déjà été marqué comme retourné.");
+                }
+
+                if (!calendrierService.isJourOuvert(dateRetourReelle)) {
+                        LocalDate prochainJour = calendrierService.getProchainJourOuvert(dateRetourReelle);
+                        throw new Exception("Retour impossible le "
+                                        + dateRetourReelle.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))
+                                        + " car la bibliothèque est fermée. Veuillez enregistrer le retour pour le "
+                                        + prochainJour.format(DateTimeFormatter.ofPattern("dd/MM/yyyy")) + ".");
                 }
 
                 if (dateRetourReelle.isBefore(pret.getDateEmprunt())) {

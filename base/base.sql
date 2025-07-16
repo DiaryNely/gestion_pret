@@ -164,6 +164,15 @@ CREATE TABLE prolongations (
 );
 
 
+--Table jour ferie
+CREATE TABLE jour_indispo(
+    id SERIAL PRIMARY KEY,
+    date_indispo DATE NOT NULL,
+    valeur VARCHAR(100)
+);
+
+
+
 -- ==============================================
 -- INDEX POUR OPTIMISER LES PERFORMANCES
 -- ==============================================
