@@ -8,7 +8,6 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
-import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.bibliotheque.gestion_pret.model.Exemplaire;
@@ -24,7 +23,7 @@ import com.bibliotheque.gestion_pret.repository.LivreRepository;
  * ATTENTION : Après une exécution réussie, il faut commenter ou supprimer
  * l'annotation @Component pour ne pas qu'il se relance.
  */
-@Component // <-- DÉCOMMENTEZ CETTE LIGNE POUR EXÉCUTER LE SCRIPT UNE FOIS
+// @Component // <-- DÉCOMMENTEZ CETTE LIGNE POUR EXÉCUTER LE SCRIPT UNE FOIS
 public class DataMigrationRunner implements CommandLineRunner {
 
     @Autowired

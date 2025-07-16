@@ -59,7 +59,10 @@ public class PretService {
                                 .orElseThrow(() -> new Exception("Adhérent non trouvé avec l'ID : " + adherentId));
 
                 if (adherent.getAbonnementFin() == null || adherent.getAbonnementFin().isBefore(dateEmprunt)) {
-                        throw new Exception("Votre abonnement n'était pas actif à la date d'emprunt sélectionnée.");
+                        throw new Exception(
+                                        "Votre abonnement n'était pas actif à la date d'emprunt sélectionnée. Il est termine le "
+                                                        + adherent.getAbonnementFin()
+                                                        + " alors que le date d'emprunt est le :" + dateEmprunt);
                 }
 
                 if (!calendrierService.isJourOuvert(dateEmprunt)) {
