@@ -15,15 +15,7 @@ import com.bibliotheque.gestion_pret.model.Livre;
 import com.bibliotheque.gestion_pret.repository.ExemplaireRepository;
 import com.bibliotheque.gestion_pret.repository.LivreRepository;
 
-/**
- * Ce script s'exécute une seule fois au démarrage pour peupler la table
- * 'exemplaires' avec des données de test précises, en se basant sur les IDs des
- * livres.
- * 
- * ATTENTION : Après une exécution réussie, il faut commenter ou supprimer
- * l'annotation @Component pour ne pas qu'il se relance.
- */
-// @Component // <-- DÉCOMMENTEZ CETTE LIGNE POUR EXÉCUTER LE SCRIPT UNE FOIS
+//@Component // <-- DÉCOMMENTEZ CETTE LIGNE POUR EXÉCUTER LE SCRIPT UNE FOIS
 public class DataMigrationRunner implements CommandLineRunner {
 
     @Autowired

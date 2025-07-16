@@ -26,13 +26,14 @@ public class ProlongationService {
         @Autowired
         private ReservationRepository reservationRepository;
 
+        @Autowired
+        private CalendrierService calendrierService;
+
         @Transactional
         public void demanderProlongation(Long pretId, Adherent demandeur, String motif) throws Exception {
-                // 1. Récupération des informations (inchangé)
                 Pret pret = pretRepository.findById(pretId)
                                 .orElseThrow(() -> new Exception("Prêt non trouvé."));
 
-                // 2. Vérifications de sécurité et de contexte (inchangé)
                 if (!pret.getAdherent().getId().equals(demandeur.getId())) {
                         throw new SecurityException(
                                         "Vous n'êtes pas autorisé à demander une prolongation pour ce prêt.");
@@ -61,10 +62,14 @@ public class ProlongationService {
 
                 int dureeProlongationEnJours = typeAdherent.getDureePretJours();
 
+                LocalDate dateRetourTheorique = pret.getDateRetourPrevue().plusDays(dureeProlongationEnJours);
+
+                LocalDate dateRetourPrevueAjustee = calendrierService.getProchainJourOuvert(dateRetourTheorique);
+
                 Prolongation demande = new Prolongation();
                 demande.setPret(pret);
                 demande.setAncienneDateRetour(pret.getDateRetourPrevue());
-                demande.setNouvelleDateRetour(pret.getDateRetourPrevue().plusDays(dureeProlongationEnJours));
+                demande.setNouvelleDateRetour(dateRetourPrevueAjustee);
                 demande.setMotif(motif);
                 demande.setDemandePar(demandeur);
                 demande.setDateDemande(LocalDate.now());

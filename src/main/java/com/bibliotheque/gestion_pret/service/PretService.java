@@ -112,7 +112,12 @@ public class PretService {
                 nouveauPret.setDateEmprunt(dateEmprunt);
 
                 int dureePret = adherent.getTypeAdherent().getDureePretJours();
-                nouveauPret.setDateRetourPrevue(dateEmprunt.plusDays(dureePret));
+
+                LocalDate dateRetourTheorique = dateEmprunt.plusDays(dureePret);
+
+                LocalDate dateRetourPrevueAjustee = calendrierService.getProchainJourOuvert(dateRetourTheorique);
+
+                nouveauPret.setDateRetourPrevue(dateRetourPrevueAjustee);
 
                 StatutPret statutEnCours = statutPretRepository.findByNom("En cours")
                                 .orElseThrow(() -> new Exception("Statut de prêt 'En cours' non trouvé."));
