@@ -73,19 +73,33 @@ public class AdminService {
         demande.setApprouvePar(admin);
         demande.setDateApprobation(LocalDate.now());
 
-        if (null == action) {
+        if (action == null) {
             throw new Exception("Action non valide.");
-        } else
-            switch (action) {
-                case "approuver" -> {
-                    demande.setStatut(StatutProlongation.approuvee);
-                    Pret pret = demande.getPret();
-                    pret.setDateRetourPrevue(demande.getNouvelleDateRetour());
-                    pretRepository.save(pret);
+        }
+
+        switch (action) {
+            case "approuver" -> {
+                demande.setStatut(StatutProlongation.approuvee);
+
+                Pret pret = demande.getPret();
+                if (pret == null) {
+                    throw new IllegalStateException("La demande n'est associée à aucun prêt.");
                 }
-                case "refuser" -> demande.setStatut(StatutProlongation.refusee);
-                default -> throw new Exception("Action non valide.");
+
+                pret.setDateRetourPrevue(demande.getNouvelleDateRetour());
+
+                pret.setNombreProlongations(pret.getNombreProlongations() + 1);
+
+                pretRepository.save(pret);
+
             }
+            case "refuser" -> {
+                demande.setStatut(StatutProlongation.refusee);
+            }
+            default -> {
+                throw new Exception("Action non valide : " + action);
+            }
+        }
 
         prolongationRepository.save(demande);
     }

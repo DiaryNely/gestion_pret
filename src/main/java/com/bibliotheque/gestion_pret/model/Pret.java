@@ -51,6 +51,9 @@ public class Pret {
     @Column(columnDefinition = "TEXT")
     private String notes;
 
+    @Column(name = "nombre_prolongations", nullable = false, columnDefinition = "integer default 0")
+    private int nombreProlongations = 0;
+
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
 }
