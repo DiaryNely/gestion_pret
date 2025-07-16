@@ -4,34 +4,21 @@
 
 -- Types d'adhérents
 INSERT INTO types_adherents (nom, description, max_livres_emprunt, duree_pret_jours) VALUES
-('Etudiant', 'Etudiant universitaire', 5, 14),
-('Professionnel', 'Professionnel en activité', 8, 21),
-('Enseignant', 'Enseignant ou chercheur', 12, 30),
+('Etudiant', 'Etudiant universitaire', 2, 7),
+('Professionnel', 'Professionnel en activité', 4, 12),
+('Enseignant', 'Enseignant ou chercheur', 3, 9),
 ('Admin', 'Administrateur système', 999, 365);
 
 -- Genres littéraires
 INSERT INTO genres_litteraires (nom, description) VALUES
-('Roman', 'Fiction narrative'),
-('Essai', 'Ouvrage de réflexion'),
-('Biographie', 'Récit de vie'),
-('Science-Fiction', 'Fiction scientifique'),
-('Polar', 'Roman policier'),
-('Histoire', 'Ouvrage historique'),
+('Jeunesse/Fantastique', 'Fiction pour la jeunesse'),
 ('Philosophie', 'Ouvrage philosophique'),
-('Informatique', 'Ouvrage technique informatique'),
-('Mathématiques', 'Ouvrage mathématique'),
 ('Littérature classique', 'Classiques de la littérature');
 
 -- Langues
 INSERT INTO langues (nom, code_iso) VALUES
-('Français', 'FR'),
-('Anglais', 'EN'),
-('Espagnol', 'ES'),
-('Allemand', 'DE'),
-('Italien', 'IT'),
-('Arabe', 'AR'),
-('Chinois', 'ZH'),
-('Japonais', 'JA');
+('Français', 'FR');
+
 
 -- Emplacements
 INSERT INTO emplacements (rayon, etagere, description) VALUES
@@ -40,37 +27,28 @@ INSERT INTO emplacements (rayon, etagere, description) VALUES
 ('A', '3', 'Poésie'),
 ('B', '1', 'Sciences humaines'),
 ('B', '2', 'Histoire'),
-('B', '3', 'Philosophie'),
-('C', '1', 'Sciences exactes'),
-('C', '2', 'Informatique'),
-('C', '3', 'Mathématiques'),
-('D', '1', 'Arts et culture'),
-('D', '2', 'Biographies'),
-('E', '1', 'Ouvrages de référence');
+('B', '3', 'Philosophie');
+
 
 -- Livres
 INSERT INTO livres (titre, auteur, date_edition, nombre_exemplaires, mots_cles, langue_id, genre_id, emplacement_id, isbn, editeur, pages) VALUES
-('Le Petit Prince', 'Antoine de Saint-Exupéry', '1943-04-06', 3, 'conte, philosophie, enfance', 1, 1, 1, '978-2-07-040835-4', 'Gallimard', 96),
-('1984', 'George Orwell', '1949-06-08', 2, 'dystopie, politique, totalitarisme', 2, 4, 2, '978-0-452-28423-4', 'Secker & Warburg', 328),
-('Algorithmes et structures de données', 'Thomas H. Cormen', '2009-07-31', 5, 'informatique, algorithmes, programmation', 2, 8, 8, '978-2-10-054526-1', 'MIT Press', 1312),
-('Histoire de France', 'Jules Michelet', '1833-01-01', 4, 'histoire, france, moyen-age', 1, 6, 5, '978-2-07-011152-3', 'Flammarion', 890),
-('Critique de la raison pure', 'Emmanuel Kant', '1781-05-11', 2, 'philosophie, métaphysique, épistémologie', 1, 7, 6, '978-2-07-075864-2', 'Flammarion', 754),
-('Fondation', 'Isaac Asimov', '1951-05-01', 4, 'science-fiction, empire galactique, psychohistoire', 2, 4, 2, '978-0-553-29335-0', 'Gnome Press', 244),
-('Les Misérables', 'Victor Hugo', '1862-03-30', 3, 'roman social, paris, révolution', 1, 10, 1, '978-2-07-040070-9', 'Lacroix', 1900),
-('Steve Jobs', 'Walter Isaacson', '2011-10-24', 2, 'biographie, apple, innovation', 2, 3, 11, '978-1-4516-4853-9', 'Simon & Schuster', 656),
-('Analyse mathématique', 'Jean-Marie Monier', '2018-08-15', 6, 'mathématiques, analyse, fonctions', 1, 9, 9, '978-2-10-077833-1', 'Dunod', 512),
-('Le Seigneur des Anneaux', 'J.R.R. Tolkien', '1954-07-29', 3, 'fantasy, aventure, magie', 2, 1, 2, '978-0-547-92822-7', 'Allen & Unwin', 1216);
+('Les Miserables','Victor Hugo', '1943-04-06',3,'conte, philosophie, enfance',1,3,1,'9782070409189','Gallimard',100),
+('L Entranger','Albert Camus','1943-04-06',2,'conte, philosophie, enfance',1,2,2,'9782070360022','Gallimard',100),
+('Harry Potter à l école des sorciers','J.K. Rowling','1943-04-06',1,'conte, philosophie, enfance',1,1,3,'9782070643026','Gallimard',100);
 
 -- Adhérents
 INSERT INTO adherents (nom, prenom, adresse_postale, email, telephone, type_adherent_id, abonnement_type, abonnement_debut, abonnement_fin, statut_paiement, mot_de_passe) VALUES
-('Dupont', 'Jean', '123 Rue de la Paix, 75001 Paris', 'jean.dupont@email.com', '0123456789', 1, 'annuel', '2024-01-15', '2026-01-15', 'paye', 'mdp_hashe_123'),
-('Martin', 'Marie', '45 Avenue des Champs, 69002 Lyon', 'marie.martin@email.com', '0234567890', 2, 'mensuel', '2024-12-01', '2025-01-01', 'paye', 'mdp_hashe_456'),
-('Dubois', 'Pierre', '78 Boulevard Saint-Germain, 75006 Paris', 'pierre.dubois@univ.fr', '0345678901', 3, 'annuel', '2024-09-01', '2025-09-01', 'paye', 'mdp_hashe_789'),
-('Leroy', 'Sophie', '12 Rue Victor Hugo, 31000 Toulouse', 'sophie.leroy@email.com', '0456789012', 1, 'mensuel', '2024-11-15', '2024-12-15', 'impaye', 'mdp_hashe_101'),
-('Bernard', 'Luc', '34 Cours Lafayette, 13001 Marseille', 'luc.bernard@entreprise.com', '0567890123', 2, 'annuel', '2024-06-01', '2025-06-01', 'paye', 'mdp_hashe_202'),
-('Admin', 'Système', '1 Rue de la Bibliothèque, 75001 Paris', 'admin@bibliotheque.fr', '0100000000', 4, 'annuel', '2024-01-01', '2025-01-01', 'paye', 'admin_hashe_999'),
-('Moreau', 'Claire', '56 Rue de la République, 67000 Strasbourg', 'claire.moreau@email.com', '0678901234', 1, 'mensuel', '2024-10-01', '2024-11-01', 'en_attente', 'mdp_hashe_303'),
-('Petit', 'Antoine', '89 Avenue de la Liberté, 59000 Lille', 'antoine.petit@research.fr', '0789012345', 3, 'annuel', '2024-08-15', '2025-08-15', 'paye', 'mdp_hashe_404');
+('Admin', 'Système', '1 Rue de la Bibliothèque, 75001 Paris', 'admin@bibliotheque.fr', '0100000000', 4, 'annuel', '2024-01-01', '2026-01-01', 'paye', 'admin_hashe_999'),
+
+
+('ETU001', 'Amine Bensaïd', '123 Rue de la Paix, 75001 Paris', 'jean.dupont@email.com', '0123456789', 1, 'annuel', '2025-02-01', '2025-07-24', 'paye', 'mdp_hashe_123'),
+('ETU002', 'Sarah El Khattabi', '45 Avenue des Champs, 69002 Lyon', 'marie.martin@email.com', '0234567890', 1, 'mensuel', '2025-02-01', '2025-07-01', 'impaye', 'mdp_hashe_456'),
+('ETU003', 'Youssef Moujahid', '78 Boulevard Saint-Germain, 75006 Paris', 'pierre.dubois@univ.fr', '0345678901', 1, 'annuel', '2025-04-01', '2025-12-01', 'paye', 'mdp_hashe_789'),
+('ENS001', 'Nadia Benali', '12 Rue Victor Hugo, 31000 Toulouse', 'sophie.leroy@email.com', '0456789012', 3, 'mensuel', '2025-07-01', '2026-07-01', 'paye', 'mdp_hashe_101'),
+('ENS002', 'Karim Haddadi', '34 Cours Lafayette, 13001 Marseille', 'luc.bernard@entreprise.com', '0567890123', 3, 'annuel', '2025-08-01', '2026-05-01', 'impaye', 'mdp_hashe_202'),
+('ENS003', 'Salima Touhami', '56 Rue de la République, 67000 Strasbourg', 'rachid.moreau@email.com', '0678901234', 3, 'mensuel', '2025-07-01', '2026-06-01', 'paye', 'mdp_hashe_303'),
+('PROF001', 'Rachid El Mansouri', '56 Rue de la République, 67000 Strasbourg', 'claire.moreau@email.com', '0678901234', 2, 'mensuel', '2025-06-01', '2025-12-01', 'paye', 'mdp_hashe_303'),
+('PROF002', 'Amina Zerouali', '89 Avenue de la Liberté, 59000 Lille', 'antoine.petit@research.fr', '0789012345', 2, 'annuel', '2024-10-01', '2025-06-01', 'impaye', 'mdp_hashe_404');
 
 -- Types de prêts
 INSERT INTO types_prets (nom, description) VALUES
@@ -82,6 +60,17 @@ INSERT INTO statuts_prets (nom, description) VALUES
 ('En cours', 'Prêt actif'),
 ('Retourné', 'Livre rendu'),
 ('En retard', 'Prêt dépassé');
+
+INSERT INTO jour_indispo(date_indispo,valeur) VALUES
+('2025-07-13','Dimanche'),
+('2025-07-20','Dimanche'),
+('2025-07-27','Dimanche'),
+('2025-08-03','Dimanche'),
+('2025-08-10','Dimanche'),
+('2025-08-17','Dimanche'),
+
+('2025-07-26','Fety be'),
+('2025-07-19','Fety kely');
 
 
 -- Paramètres système

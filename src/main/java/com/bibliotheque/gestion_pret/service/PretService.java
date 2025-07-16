@@ -2,7 +2,6 @@ package com.bibliotheque.gestion_pret.service;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.time.temporal.ChronoUnit;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -48,6 +47,9 @@ public class PretService {
         @Autowired
         private ParametreService parametreService;
 
+        @Autowired
+        private CalendrierService calendrierService;
+
         @Transactional
         public void emprunterLivre(Long adherentId, Long livreId, Long typePretId, LocalDate dateEmprunt)
                         throws Exception {
@@ -57,7 +59,18 @@ public class PretService {
                                 .orElseThrow(() -> new Exception("Adhérent non trouvé avec l'ID : " + adherentId));
 
                 if (adherent.getAbonnementFin() == null || adherent.getAbonnementFin().isBefore(dateEmprunt)) {
-                        throw new Exception("Votre abonnement n'était pas actif à la date d'emprunt sélectionnée.");
+                        throw new Exception(
+                                        "Votre abonnement n'était pas actif à la date d'emprunt sélectionnée. Il est termine le "
+                                                        + adherent.getAbonnementFin()
+                                                        + " alors que le date d'emprunt est le :" + dateEmprunt);
+                }
+
+                if (!calendrierService.isJourOuvert(dateEmprunt)) {
+                        LocalDate prochainJour = calendrierService.getProchainJourOuvert(dateEmprunt);
+                        throw new Exception("Emprunt impossible le "
+                                        + dateEmprunt.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))
+                                        + " car la bibliothèque est fermée. Prochain jour d'ouverture : "
+                                        + prochainJour.format(DateTimeFormatter.ofPattern("dd/MM/yyyy")) + ".");
                 }
 
                 if (adherent.getDateFinSuspension() != null
@@ -119,6 +132,14 @@ public class PretService {
 
                 if (pret.getDateRetourReelle() != null) {
                         throw new Exception("Ce livre a déjà été marqué comme retourné.");
+                }
+
+                if (!calendrierService.isJourOuvert(dateRetourReelle)) {
+                        LocalDate prochainJour = calendrierService.getProchainJourOuvert(dateRetourReelle);
+                        throw new Exception("Retour impossible le "
+                                        + dateRetourReelle.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))
+                                        + " car la bibliothèque est fermée. Veuillez enregistrer le retour pour le "
+                                        + prochainJour.format(DateTimeFormatter.ofPattern("dd/MM/yyyy")) + ".");
                 }
 
                 if (dateRetourReelle.isBefore(pret.getDateEmprunt())) {
@@ -183,25 +204,28 @@ public class PretService {
                         return;
                 }
 
-                long joursDeRetard = ChronoUnit.DAYS.between(dateRetourPrevue.plusDays(joursTolerance),
-                                dateRetourReelle);
-                int ratioSuspension = parametreService.getRatioSuspensionParJourRetard();
+                Adherent adherent = pret.getAdherent();
 
-                if (ratioSuspension <= 0) {
+                int joursDeSuspension = adherent.getTypeAdherent().getDureeSuspensionRetardJours();
+
+                if (joursDeSuspension <= 0) {
                         return;
                 }
 
-                long joursDeSuspension = joursDeRetard * ratioSuspension;
-
-                Adherent adherent = pret.getAdherent();
                 LocalDate dateDebutSuspension = LocalDate.now();
+
                 if (adherent.getDateFinSuspension() != null
                                 && adherent.getDateFinSuspension().isAfter(dateDebutSuspension)) {
                         dateDebutSuspension = adherent.getDateFinSuspension().plusDays(1);
                 }
 
                 LocalDate nouvelleDateFinSuspension = dateDebutSuspension.plusDays(joursDeSuspension);
+
                 adherent.setDateFinSuspension(nouvelleDateFinSuspension);
                 adherentRepository.save(adherent);
+
+                System.out.println("Adhérent ID " + adherent.getId() + " suspendu pour "
+                                + joursDeSuspension + " jours (pénalité fixe de son type). Fin de suspension le "
+                                + nouvelleDateFinSuspension);
         }
 }

@@ -59,12 +59,15 @@
                                     <form th:action="@{/admin/penalites/maj-statut}" method="post"
                                         class="d-flex align-items-center gap-2">
                                         <input type="hidden" name="penaliteId" th:value="${penalite.id}">
-                                        <select name="statut" class="form-select form-select-sm">
-                                            <!-- On boucle sur les statuts possibles ('impaye', 'paye', 'remise') -->
+
+                                        <!-- Le select avec le style conditionnel -->
+                                        <select name="statut" class="form-select form-select-sm"
+                                            th:classappend="${'status-' + #strings.toLowerCase(penalite.statutPaiement.name())}">
                                             <option th:each="s : ${statuts}" th:value="${s}" th:text="${s.name()}"
                                                 th:selected="${s == penalite.statutPaiement}">
                                             </option>
                                         </select>
+
                                         <button type="submit" class="btn btn-sm btn-primary">
                                             <i class="bi bi-check-lg"></i> Valider
                                         </button>

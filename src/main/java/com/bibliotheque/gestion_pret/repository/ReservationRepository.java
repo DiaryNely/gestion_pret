@@ -24,4 +24,8 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long> 
 
     List<Reservation> findByLivreAndStatutOrderByDateReservationAsc(Livre livre, StatutReservation statut);
 
+    long countByAdherentIdAndStatut(Long adherentId, StatutReservation active);
+
+    boolean existsByLivreAndStatut(Livre livre, StatutReservation active);
+
 }
