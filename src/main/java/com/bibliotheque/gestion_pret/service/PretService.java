@@ -2,7 +2,6 @@ package com.bibliotheque.gestion_pret.service;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.time.temporal.ChronoUnit;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -202,25 +201,28 @@ public class PretService {
                         return;
                 }
 
-                long joursDeRetard = ChronoUnit.DAYS.between(dateRetourPrevue.plusDays(joursTolerance),
-                                dateRetourReelle);
-                int ratioSuspension = parametreService.getRatioSuspensionParJourRetard();
+                Adherent adherent = pret.getAdherent();
 
-                if (ratioSuspension <= 0) {
+                int joursDeSuspension = adherent.getTypeAdherent().getDureeSuspensionRetardJours();
+
+                if (joursDeSuspension <= 0) {
                         return;
                 }
 
-                long joursDeSuspension = joursDeRetard * ratioSuspension;
-
-                Adherent adherent = pret.getAdherent();
                 LocalDate dateDebutSuspension = LocalDate.now();
+
                 if (adherent.getDateFinSuspension() != null
                                 && adherent.getDateFinSuspension().isAfter(dateDebutSuspension)) {
                         dateDebutSuspension = adherent.getDateFinSuspension().plusDays(1);
                 }
 
                 LocalDate nouvelleDateFinSuspension = dateDebutSuspension.plusDays(joursDeSuspension);
+
                 adherent.setDateFinSuspension(nouvelleDateFinSuspension);
                 adherentRepository.save(adherent);
+
+                System.out.println("Adhérent ID " + adherent.getId() + " suspendu pour "
+                                + joursDeSuspension + " jours (pénalité fixe de son type). Fin de suspension le "
+                                + nouvelleDateFinSuspension);
         }
 }

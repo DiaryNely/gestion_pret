@@ -188,9 +188,7 @@ CREATE INDEX idx_prets_statut ON prets(statut_pret_id);
 CREATE INDEX idx_reservations_statut ON reservations(statut);
 CREATE INDEX idx_penalites_statut ON penalites(statut_paiement);
 
--- ==============================================
--- CONTRAINTES ADDITIONNELLES
--- ==============================================
+
 
 -- Contrainte pour s'assurer que la date de retour prévue est après la date d'emprunt
 ALTER TABLE prets ADD CONSTRAINT check_dates_pret 
@@ -212,35 +210,34 @@ CHECK (nombre_exemplaires > 0);
 ALTER TABLE penalites ADD CONSTRAINT check_montant_penalite 
 CHECK (montant >= 0);
 
--- ==============================================
--- TRIGGERS POUR MISE À JOUR AUTOMATIQUE
--- ==============================================
+
+-- Ajout des colonnes de quota à la table types_adherents
+ALTER TABLE types_adherents ADD COLUMN IF NOT EXISTS max_reservations_actives INTEGER NOT NULL DEFAULT 1;
+ALTER TABLE types_adherents ADD COLUMN IF NOT EXISTS duree_prolongation_jours INTEGER NOT NULL DEFAULT 3;
 
 
--- ==============================================
--- REQUÊTES UTILES POUR VÉRIFICATION
--- ==============================================
+-- Mise à jour des quotas pour chaque type d'adhérent
+-- Adaptez le 'WHERE nom = ...' au nom exact de vos types dans la BDD.
+UPDATE types_adherents SET  max_reservations_actives = 1, duree_prolongation_jours = 3 WHERE nom = 'Etudiant';
+UPDATE types_adherents SET  max_reservations_actives = 2, duree_prolongation_jours = 5 WHERE nom = 'Enseignant';
+UPDATE types_adherents SET  max_reservations_actives = 3, duree_prolongation_jours = 7 WHERE nom = 'Professionnel';
 
--- Vérifier les données insérées
--- SELECT COUNT(*) FROM livres;
--- SELECT COUNT(*) FROM adherents;
--- SELECT COUNT(*) FROM prets;
--- SELECT COUNT(*) FROM reservations;
--- SELECT COUNT(*) FROM penalites;
 
--- Afficher les prêts en cours
--- SELECT l.titre, a.nom, a.prenom, p.date_emprunt, p.date_retour_prevue
--- FROM prets p
--- JOIN livres l ON p.livre_id = l.id
--- JOIN adherents a ON p.adherent_id = a.id
--- JOIN statuts_prets sp ON p.statut_pret_id = sp.id
--- WHERE sp.nom = 'En cours';
+ALTER TABLE types_adherents 
+ADD COLUMN IF NOT EXISTS duree_suspension_retard_jours INTEGER NOT NULL DEFAULT 7;
 
--- Afficher les prêts en retard
--- SELECT l.titre, a.nom, a.prenom, p.date_retour_prevue, 
---        CURRENT_DATE - p.date_retour_prevue as jours_retard
--- FROM prets p
--- JOIN livres l ON p.livre_id = l.id
--- JOIN adherents a ON p.adherent_id = a.id
--- JOIN statuts_prets sp ON p.statut_pret_id = sp.id
--- WHERE sp.nom = 'En retard' OR (sp.nom = 'En cours' AND p.date_retour_prevue < CURRENT_DATE);
+
+
+UPDATE types_adherents 
+SET duree_suspension_retard_jours = 10 
+WHERE nom = 'Etudiant'; -- Ou l'identifiant correspondant à ETU
+
+-- Pour les Enseignants (ENS) -> 9 jours
+UPDATE types_adherents 
+SET duree_suspension_retard_jours = 9 
+WHERE nom = 'Enseignant'; -- Ou l'identifiant correspondant à ENS
+
+-- Pour les Professionnels (PROF) -> 8 jours
+UPDATE types_adherents 
+SET duree_suspension_retard_jours = 8
+WHERE nom = 'Professionnel'; -- Ou l'identifiant correspondant à PROF

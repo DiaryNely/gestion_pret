@@ -31,6 +31,15 @@ public class TypeAdherent {
     @Column(name = "duree_pret_jours")
     private Integer dureePretJours;
 
+    @Column(name = "max_reservations_actives", nullable = false)
+    private Integer maxReservationsActives;
+
+    @Column(name = "duree_prolongation_jours", nullable = false)
+    private Integer dureeProlongationJours;
+
+    @Column(name = "duree_suspension_retard_jours", nullable = false, columnDefinition = "integer default 7")
+    private Integer dureeSuspensionRetardJours;
+
     private Boolean actif;
 
     @Column(name = "created_at", updatable = false)

@@ -51,6 +51,15 @@ public class ReservationService {
             throw new IllegalStateException("Vous avez déjà une réservation active pour ce livre.");
         }
 
+        long reservationsActives = reservationRepository.countByAdherentIdAndStatut(adherentId,
+                StatutReservation.active);
+
+        // Vérification du quota de réservations
+        if (reservationsActives >= adherent.getTypeAdherent().getMaxReservationsActives()) {
+            throw new IllegalStateException(
+                    "Limite de " + adherent.getTypeAdherent().getMaxReservationsActives() + " réservations atteinte.");
+        }
+
         Reservation reservation = new Reservation();
         reservation.setAdherent(adherent);
         reservation.setLivre(livre);
